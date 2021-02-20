@@ -8,7 +8,7 @@ LPVOID MH_HookVtbl(LPVOID object, DWORD index, LPVOID funct) {
 	LPVOID orig = NULL;
 	MH_STATUS status = MH_CreateHook((*(void***)object)[index], funct, &orig);
 	if (status != MH_OK) {
-		printf("[nezu] MH_CreateHook failed: %d\n", status);
+		printf("[nezu] MH_CreateHook failed: %s\n", MH_StatusToString(status));
 		return NULL;
 	}
 	return orig;
@@ -23,10 +23,15 @@ void H::ApplyHooks() {
 	oHooked_Reset = (f_Reset)MH_HookVtbl(M::d3d9Device, 16, &Hooked_Reset);
 	oHooked_LockCursor = (f_LockCursor)MH_HookVtbl(I::Surface, 67, &Hooked_LockCursor);
 
+	MH_EnableHook(MH_ALL_HOOKS);
+
 	while (!(M::Window = FindWindowA("Valve001", nullptr))) 
 		Sleep(50);
 	OldWindow = (WNDPROC)SetWindowLongPtrA(M::Window, GWL_WNDPROC, (LONG_PTR)Hooked_WndProc);
+}
 
-
-	MH_EnableHook(MH_ALL_HOOKS);
+void H::RemoveHooks() {
+	if (M::Window && OldWindow) SetWindowLongPtrA(M::Window, GWL_WNDPROC, (LONG_PTR)OldWindow);
+	MH_DisableHook(MH_ALL_HOOKS);
+	MH_Uninitialize();
 }

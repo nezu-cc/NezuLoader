@@ -26,10 +26,11 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <windows.h>
+//#include <windows.h>
+#include "pch.h"
 
 #ifdef _MSC_VER
-    #include <intrin.h>
+    //#include <intrin.h>
 #endif
 
 #ifndef ARRAYSIZE
@@ -277,11 +278,11 @@ BOOL CreateTrampolineFunction(PTRAMPOLINE ct)
         ct->nIP++;
 
         // Avoid using memcpy to reduce the footprint.
-#ifndef _MSC_VER
+//#ifndef _MSC_VER
         memcpy((LPBYTE)ct->pTrampoline + newPos, pCopySrc, copySize);
-#else
-        __movsb((LPBYTE)ct->pTrampoline + newPos, pCopySrc, copySize);
-#endif
+//#else
+//        __movsb((LPBYTE)ct->pTrampoline + newPos, pCopySrc, copySize);
+//#endif
         newPos += copySize;
         oldPos += hs.len;
     }

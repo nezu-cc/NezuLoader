@@ -1075,7 +1075,8 @@ bool ImGui::Checkbox(const char* label, bool* v)
 
     const ImRect check_bb(pos, pos + ImVec2(square_sz, square_sz));
     RenderNavHighlight(total_bb, id);
-    RenderFrame(check_bb.Min, check_bb.Max, GetColorU32((held && hovered) ? ImGuiCol_FrameBgActive : hovered ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg), true, style.FrameRounding);
+    ImU32 frame_col = GetColorU32((held && hovered) ? ImGuiCol_FrameBgActive : hovered ? ImGuiCol_FrameBgHovered : ImGuiCol_FrameBg);
+    RenderFrame(check_bb.Min, check_bb.Max, frame_col, true, style.FrameRounding);
     ImU32 check_col = GetColorU32(ImGuiCol_CheckMark);
     bool mixed_value = (window->DC.ItemFlags & ImGuiItemFlags_MixedValue) != 0;
     if (mixed_value)
@@ -1087,8 +1088,10 @@ bool ImGui::Checkbox(const char* label, bool* v)
     }
     else if (*v)
     {
+        ImVec2 pad2(0, 0);
+        window->DrawList->AddRectFilled(check_bb.Min + pad2, check_bb.Max - pad2, (held || hovered) ? frame_col : check_col, style.FrameRounding);
         const float pad = ImMax(1.0f, IM_FLOOR(square_sz / 6.0f));
-        RenderCheckMark(window->DrawList, check_bb.Min + ImVec2(pad, pad), check_col, square_sz - pad * 2.0f);
+        RenderCheckMark(window->DrawList, check_bb.Min + ImVec2(pad, pad), GetColorU32(ImGuiCol_FrameBg), square_sz - pad * 2.0f);
     }
 
     if (g.LogEnabled)

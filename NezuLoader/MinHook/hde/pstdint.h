@@ -26,7 +26,8 @@
 
 #pragma once
 
-#include <windows.h>
+//#include <windows.h>
+#include "pch.h"
 
 // Integer types for HDE.
 typedef INT8   int8_t;

@@ -1,6 +1,58 @@
 #include "pch.h"
 #include "Menu.h"
 #include "imgui/RobotoBold.h"
+#include "Hooks.h"
+
+std::unordered_map<ImGuiID, animatedbtn_t> animated_buttons;
+
+bool animatedMenuButton(const char* label, const ImVec2 size, bool selected = false, bool vertical = false) {
+    ImGuiID id = ImGui::GetID((std::string(label) + "_back").c_str());
+    ImGuiStyle style = ImGui::GetStyle();
+    animatedbtn_t* b = &animated_buttons[id];
+    const ImVec2 label_size = ImGui::CalcTextSize(label, NULL, true);
+    const auto pos = ImGui::GetCurrentWindow()->DC.CursorPos;
+    const ImRect rect(pos, pos + size);
+    ImGui::ItemSize(size, style.FramePadding.y);
+    if (!ImGui::ItemAdd(rect, id)) return false;
+    bool hovered;
+    bool pressed = ImGui::ButtonBehavior(rect, id, &hovered, 0);
+    if (pressed) ImGui::MarkItemEdited(id);
+    float delta = ImGui::GetIO().DeltaTime;
+    float sizevar = vertical ? size.y : size.x;
+    if (hovered || selected) {
+        if (b->mode == 100) {
+            b->mode = 0;
+            b->speed = 15;
+        }
+        if (b->mode != 2) {
+            b->speed += delta * 50;
+            b->w += b->speed * delta * 100;
+        }
+        if (b->w > sizevar) {
+            b->w = sizevar;
+            b->speed *= b->mode == 0 ? -.3f : 0;
+            b->mode++;
+        }
+    }
+    else {
+        if (b->mode != 100) b->speed = 0;
+        b->mode = 100;
+        b->speed -= delta * 50;
+        b->w += b->speed * delta * 100;
+        if (b->w < 0) {
+            b->speed = 0;
+            b->w = 0;
+        }
+    }
+    const ImRect rect2(pos, pos + (vertical ? ImVec2(size.x, b->w) : ImVec2(b->w, size.y)));
+    ImGui::RenderNavHighlight(rect, id);
+    ImGui::RenderFrame(rect2.Min, rect2.Max, ImGui::GetColorU32(selected ? ImGuiCol_ButtonActive : ImGuiCol_Button), false, style.FrameRounding);
+    ImGui::RenderTextClipped(rect.Min + style.FramePadding, rect.Max - style.FramePadding, label, NULL, &label_size, style.ButtonTextAlign, &rect);
+
+    //printf("%s: %d %.2f %.2f\n", label, b->mode, b->w, b->speed);
+
+    return pressed;
+}
 
 bool Menu::open = true;
 
@@ -16,12 +68,12 @@ void Menu::init(IDirect3DDevice9* pDevice) {
     // ImVec4 light_accent = ImVec4(0.50f, 1.00f, 0.00f, 1.00f);
 
     // orange
-    ImVec4 dark_accent = ImVec4(0.85f, 0.37f, 0.00f, 1.00f);
-    ImVec4 light_accent = ImVec4(1.00f, 0.63f, 0.00f, 1.00f);
+    //ImVec4 dark_accent = ImVec4(0.85f, 0.37f, 0.00f, 1.00f);
+    //ImVec4 light_accent = ImVec4(1.00f, 0.63f, 0.00f, 1.00f);
 
     // purple
-    // ImVec4 dark_accent = ImVec4(0.416f, 0.000f, 1.000f, 1.000f);
-    // ImVec4 light_accent = ImVec4(0.691f, 0.484f, 0.973f, 1.000f);
+    ImVec4 dark_accent = ImVec4(0.416f, 0.000f, 1.000f, 1.000f);
+    ImVec4 light_accent = ImVec4(0.691f, 0.484f, 0.973f, 1.000f);
 
     auto& style = ImGui::GetStyle();
     style.WindowPadding = { 6,6 };
@@ -33,7 +85,8 @@ void Menu::init(IDirect3DDevice9* pDevice) {
     style.GrabMinSize = 8;
     style.WindowBorderSize = style.ChildBorderSize = style.PopupBorderSize = style.TabBorderSize = 0;
     style.FrameBorderSize = 1;
-    style.WindowRounding = style.ChildRounding = style.PopupRounding = style.ScrollbarRounding = style.GrabRounding = style.TabRounding = 4;
+    style.WindowRounding = 6;
+    style.ChildRounding = style.PopupRounding = style.ScrollbarRounding = style.GrabRounding = style.TabRounding = 4;
 
 
     ImVec4* colors = ImGui::GetStyle().Colors;
@@ -102,5 +155,24 @@ void Menu::init(IDirect3DDevice9* pDevice) {
     font_cfg.FontDataOwnedByAtlas = false;
     strcpy(font_cfg.Name, "Roboto Bold");
     io.Fonts->AddFontFromMemoryCompressedTTF(RobotoBold_compressed_data, RobotoBold_compressed_size, 15.0f, &font_cfg);
+
+}
+
+void Menu::uninit() {
+
+    ImGui_ImplDX9_Shutdown();
+    ImGui_ImplWin32_Shutdown();
+    ImGui::DestroyContext();
+
+}
+
+void Menu::Draw() {
+
+    ImGui::ShowDemoWindow();
+
+    {//debug window
+        if (ImGui::Button("unload"))
+            G::unload = true;
+    }
 
 }

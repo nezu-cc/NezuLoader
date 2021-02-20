@@ -26,9 +26,10 @@
  *  SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <windows.h>
-#include <tlhelp32.h>
-#include <limits.h>
+//#include <windows.h>
+//#include <tlhelp32.h>
+//#include <limits.h>
+#include "pch.h"
 
 #include "MinHook.h"
 #include "buffer.h"

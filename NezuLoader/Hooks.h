@@ -16,5 +16,6 @@ namespace H {
 	void __fastcall Hooked_LockCursor(void* thisPtr, void* edx);
 
 	void ApplyHooks();
+	void RemoveHooks();
 };
 

@@ -4,13 +4,14 @@
 #define _CRT_SECURE_NO_WARNINGS
 #define DIRECTINPUT_VERSION 0x0800
 #define IMGUI_DEFINE_MATH_OPERATORS
+#define MMNOJOY
 
-#include <windows.h>
+#include <Windows.h>
+#include <d3d9.h>
 #include <tlhelp32.h>
 #include <limits.h>
 #include <string.h>
 #include <string>
-#include <d3d9.h>
 #include <dinput.h>
 #include <ctype.h>
 #include <stdio.h>
@@ -26,21 +27,26 @@
 #include <stdlib.h>
 #include <psapi.h>
 #include <unordered_map>
-
-#include "Globals.h"
-#include "Util.h"
-#include "Structs.h"
-#include "Interfaces.h"
-#include "Memory.h"
-#include "Menu.h"
+#include <shobjidl.h> 
+#include <locale>
+#include <codecvt>
+#include <fstream>
+#include <dwmapi.h>
+#include <Shlobj.h>
+#include <shlwapi.h>
+#include <mutex>
 
 #pragma warning( push )
 #pragma warning( disable : 6387 6451 6387 6011 28182 6255 26495 6031 26812 6031 26551 )
-#include "imgui/imgui.h"
-#include "imgui/imgui_internal.h"
-#include "imgui/imgui_stdlib.h"
-#include "imgui/imgui_impl_dx9.h"
-#include "imgui/imgui_impl_win32.h"
+#include "imgui.h"
+#include "imgui_internal.h"
+#include "imgui_stdlib.h"
+#include "imgui_impl_dx9.h"
+#include "imgui_impl_win32.h"
 #pragma warning( pop )
+
+#include "LoaderLog.h"
+#include "Undocumented.h"
+#include "Util.h"
 
 #endif //PCH_H
