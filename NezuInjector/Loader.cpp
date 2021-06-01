@@ -9,17 +9,66 @@ DWORD WINAPI LoaderThread(LPVOID lpThreadParameter) {
 	NezuInjectorSettings* settings = (NezuInjectorSettings*)lpThreadParameter;
 	HANDLE hSteamProc = NULL;
 
-	if (settings->RestartSteam) {
+	BOOL nezu_injector_dir_needed = settings->VacBypass || settings->injectionMode == InjectionMode::Dll;
+	WCHAR nezu_injector_dir[MAX_PATH];
+
+	PWSTR win_dir = NULL;
+	if (FAILED(SHGetKnownFolderPath(FOLDERID_Windows, 0, NULL, &win_dir))) {
+		CoTaskMemFree(win_dir);
+		if (nezu_injector_dir_needed) {
+			L::Error("Failed to load (SHGetKnownFolderPath) 0x%X", GetLastError());
+			return FALSE;
+		}
+	}
+	else {//SHGetKnownFolderPath success
+		if (!PathCombineW(nezu_injector_dir, win_dir, L"NezuInjectorTmp")) {
+			CoTaskMemFree(win_dir);
+			if (nezu_injector_dir_needed) {
+				L::Error("Failed to load (PathCombineW)(1) 0x%X", GetLastError());
+				return FALSE;
+			}
+		}
+		else {//PathCombineW success
+			CoTaskMemFree(win_dir);
+			if (!CreateDirectoryW(nezu_injector_dir, NULL) && GetLastError() != ERROR_ALREADY_EXISTS) { //It's ok if it exists
+				if (nezu_injector_dir_needed) {
+					L::Error("Failed to load (CreateDirectoryW)(1) 0x%X", GetLastError());
+					return FALSE;
+				}
+			}
+			else {//CreateDirectoryW success
+				//next past is silent because we don't care if it fails
+				WCHAR nezu_injector_dir_wildcard[MAX_PATH];
+				wcscpy_s(nezu_injector_dir_wildcard, nezu_injector_dir);
+				wcscat_s(nezu_injector_dir_wildcard, L"\\*");
+
+				WIN32_FIND_DATA ffd;
+				HANDLE hFind = FindFirstFileW(nezu_injector_dir_wildcard, &ffd);
+				if (hFind != INVALID_HANDLE_VALUE) {
+					do {
+						if (!(ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+							WCHAR file_to_delete[MAX_PATH];
+							if (PathCombineW(file_to_delete, nezu_injector_dir, ffd.cFileName)) {
+								DeleteFileW(file_to_delete);
+							}
+						}
+					} while (FindNextFileW(hFind, &ffd) != 0);
+				}
+			}
+		}
+	}
+
+	if (settings->RestartSteam || proc->FindProcess(_T("steam.exe")) == 0) { //if steam isn't running (re)start it
 
 		//make sure steam is dead
 		do  {
-			U::KillAll(_T("csgo.exe"));
-			U::KillAll(_T("steam.exe"));
-			U::KillAll(_T("steamservice.exe"));
-			U::KillAll(_T("steamwebhelper.exe"));
+			proc->KillAll(_T("csgo.exe"));
+			proc->KillAll(_T("steam.exe"));
+			proc->KillAll(_T("steamservice.exe"));
+			proc->KillAll(_T("steamwebhelper.exe"));
 
 			Sleep(100);
-		} while (U::IsProcessOpen(_T("steam.exe")) || U::IsProcessOpen(_T("steamservice.exe")) || U::IsProcessOpen(_T("steamwebhelper.exe")));
+		} while (proc->IsProcessOpen(_T("steam.exe")) || proc->IsProcessOpen(_T("steamservice.exe")) || proc->IsProcessOpen(_T("steamwebhelper.exe")));
 
 		L::Info("All Steam proceses killed");
 
@@ -46,9 +95,12 @@ DWORD WINAPI LoaderThread(LPVOID lpThreadParameter) {
 
 		//start steam
 		auto commandlaine = _T("\"") + std::basic_string<TCHAR>(steam_path) + _T("\"");
-		if (settings->injectionMode != InjectionMode::NezuVacOnly) {
-			commandlaine += _T("-silent -applaunch 730");//only start cs if we are injecting into it
-		}
+		if (settings->injectionMode != InjectionMode::NezuVacOnly)
+			commandlaine += _T("-silent -applaunch 730 ");//only start cs if we are injecting into it
+		if (settings->UseCustomCredentials)
+			commandlaine += _T("-login ") + UTF8TCHAR(settings->Creds.first) + _T(" ") + UTF8TCHAR(settings->Creds.second) + _T(" ");
+		commandlaine += UTF8TCHAR(settings->CustomSteamArgs);
+
 		//CreateProcessW can change the buffer so we need to coppy it
 		DWORD commandlaine_buf_len = (commandlaine.length() + 1) * sizeof(TCHAR);
 		LPTSTR commandlaine_buf = new TCHAR[commandlaine_buf_len];
@@ -59,7 +111,7 @@ DWORD WINAPI LoaderThread(LPVOID lpThreadParameter) {
 		si.cb = sizeof(si);
 
 		PROCESS_INFORMATION pi = { 0 };
-		if (!CreateProcess(NULL, commandlaine_buf, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi)) {
+		if (!proc->SpawnProcess(commandlaine_buf, &si, &pi)) {
 			CloseHandle(pi.hProcess);
 			CloseHandle(pi.hThread);
 			delete[] commandlaine_buf;
@@ -69,9 +121,12 @@ DWORD WINAPI LoaderThread(LPVOID lpThreadParameter) {
 		delete[] commandlaine_buf;
 		CloseHandle(pi.hThread);
 
-		L::Info("Steam started");
-
 		hSteamProc = pi.hProcess;
+
+		while (!proc->IsProcessInitialized(hSteamProc))
+			Sleep(50);
+
+		L::Info("Steam started");
 
 	}
 
@@ -79,7 +134,7 @@ DWORD WINAPI LoaderThread(LPVOID lpThreadParameter) {
 
 		if (!hSteamProc) { //if steam was not restarted just open it normaly
 
-			DWORD steam_pid = U::FindProcess(_T("steam.exe"));
+			DWORD steam_pid = proc->FindProcess(_T("steam.exe"));
 			if (!steam_pid) {
 				L::Error("Failed to find Steam process (FindProcess) 0x%X", GetLastError());
 				return FALSE;
@@ -91,6 +146,11 @@ DWORD WINAPI LoaderThread(LPVOID lpThreadParameter) {
 				return FALSE;
 			}
 
+		}
+
+		while (proc->IsProcessOpen(_T("steamservice.exe"))) {
+			Sleep(100);
+			proc->KillAll(_T("steamservice.exe")); // just making sure
 		}
 
 		L::Debug("Injecting NezuVac into Steam");
@@ -123,23 +183,13 @@ DWORD WINAPI LoaderThread(LPVOID lpThreadParameter) {
 			return FALSE;
 		}
 
-		PWSTR win_dir = NULL;
-		if (FAILED(SHGetKnownFolderPath(FOLDERID_Windows, 0, NULL, &win_dir))) {
-			CoTaskMemFree(win_dir);
-			CloseHandle(hSteamProc);
-			L::Error("Failed to load NezuVac (SHGetKnownFolderPath) 0x%X", GetLastError());
-			return FALSE;
-		}
 
 		WCHAR nezu_vac_filename[MAX_PATH];
-		if (!PathCombineW(nezu_vac_filename, win_dir, L"NezuInjectorTmp\\NezuVac.dll")) {
-			CoTaskMemFree(win_dir);
+		if (!PathCombineW(nezu_vac_filename, nezu_injector_dir, L"NezuVac.dll")) {
 			CloseHandle(hSteamProc);
-			L::Error("Failed to load NezuVac (PathCombineW) 0x%X", GetLastError());
+			L::Error("Failed to load NezuVac (PathCombineW)(2) 0x%X", GetLastError());
 			return FALSE;
 		}
-
-		CoTaskMemFree(win_dir);
 
 		HANDLE hNezuVacFile = CreateFileW(nezu_vac_filename, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 		if (hNezuVacFile == INVALID_HANDLE_VALUE) {
@@ -203,7 +253,7 @@ DWORD WINAPI LoaderThread(LPVOID lpThreadParameter) {
 			return FALSE;
 		}
 		L::Debug("Waiting for NezuVac injection confirmation...");
-		int tries = 50; // 5s at 100ms intervals
+		int tries = 100; // 10s at 100ms intervals
 		do {
 			if (nezu_vac_status.initialized) {
 				L::Info("NezuVac injection confirmed");
@@ -238,18 +288,18 @@ DWORD WINAPI LoaderThread(LPVOID lpThreadParameter) {
 	DWORD csgo_pid = 0;
 
 	if (!settings->RestartSteam) {
-		csgo_pid = U::FindProcess(_T("csgo.exe"));
+		csgo_pid = proc->FindProcess(_T("csgo.exe"));
 	}
 
 	if (csgo_pid == 0) {
 		if (!settings->RestartSteam) {
 			L::Debug("Starting CS:GO");
-			ShellExecute(NULL, NULL, _T("steam://rungameid/730"), NULL, NULL, SW_SHOW);
+			proc->Execute(_T("steam://rungameid/730"));
 		}
 
 		L::Debug("Waiting for CS:GO to start...");
 		do {
-			csgo_pid = U::FindProcess(_T("csgo.exe"));
+			csgo_pid = proc->FindProcess(_T("csgo.exe"));
 			Sleep(100);
 		} while (csgo_pid == 0);
 	}
@@ -261,6 +311,9 @@ DWORD WINAPI LoaderThread(LPVOID lpThreadParameter) {
 		L::Error("Failed to open CS:GO process (OpenProcess) 0x%X", GetLastError());
 		return FALSE;
 	}
+
+	while (!proc->IsProcessInitialized(hCsProc))
+		Sleep(50);
 
 	L::Debug("Waiting for CS:GO to fully load before injecting...");
 
@@ -281,10 +334,11 @@ DWORD WINAPI LoaderThread(LPVOID lpThreadParameter) {
 		return FALSE;
 	}
 
-#ifdef UNICODE
-	//utf8 to WCHAR
+	//utf8 to wide char
     std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-	std::wstring dll_path = converter.from_bytes(settings->dll);
+	std::wstring w_dll_path = converter.from_bytes(settings->dll);
+#ifdef UNICODE
+	std::wstring dll_path = w_dll_path;
 #else
     std::string dll_path = settings.dll;
 #endif // UNICODE
@@ -295,14 +349,118 @@ DWORD WINAPI LoaderThread(LPVOID lpThreadParameter) {
 	switch (settings->injectionMode)
 	{
 	case InjectionMode::NezuLoader:
-			inj_res = false;//not implemented
+	{
+		HRSRC nezu_loader_rc = FindResource(NULL, MAKEINTRESOURCE(IDR_RCDATA2), RT_RCDATA);
+		if (!nezu_loader_rc) {
+			L::Error("Failed to load NezuLoader (FindResource) 0x%X", GetLastError());
+			inj_res = false;
 			break;
-		case InjectionMode::Dll:
-			inj_res = Injector::LoadLib(hCsProc, dll_path.c_str(), true);
-		    break;
-		case InjectionMode::DllManual:
-			inj_res = Injector::ManualMap(hCsProc, dll_path.c_str());
-		    break;
+		}
+
+		if (SizeofResource(NULL, nezu_loader_rc) == 0) {
+			L::Error("Failed to load NezuLoader (SizeofResource) 0x%X", GetLastError());
+			inj_res = false;
+			break;
+		}
+
+		HGLOBAL nezu_loader_handle = LoadResource(NULL, nezu_loader_rc);
+		if (!nezu_loader_handle) {
+			L::Error("Failed to load NezuLoader (LoadResource) 0x%X", GetLastError());
+			inj_res = false;
+			break;
+		}
+
+		void* nezu_loader_data = LockResource(nezu_loader_handle);
+		if (!nezu_loader_data) {
+			L::Error("Failed to load NezuLoader (LockResource) 0x%X", GetLastError());
+			inj_res = false;
+			break;
+		}
+
+		HMODULE hRemoteModule = NULL;
+		if (!Injector::ManualMap(hCsProc, (const BYTE*)nezu_loader_data, &hRemoteModule)) {
+			L::Error("Failed to load NezuLoader (Injector::ManualMap) (%s)", Injector::GetLastErrorString().c_str());
+			inj_res = false;
+			break;
+		}
+
+		L::Info("NezuLoader injected");
+
+		//no DLL selected
+		if (settings->dll.empty()) {
+			inj_res = true;
+			break;
+		}
+
+		L::Debug("Injecting DLL using NezuLoader...");
+
+		DWORD dwRemoteInjectFuncRVA = U::GetExportFuncRVA((const PBYTE)nezu_loader_data, "Inject");
+		if (dwRemoteInjectFuncRVA == 0) {
+			L::Error("Failed to inject DLL (U::GetExportFuncRVA), NezuLoader was injected but the selected DLL was not");
+			inj_res = false;
+			break;
+		}
+
+		PVOID pStringArg = VirtualAllocEx(hCsProc, NULL, (w_dll_path.size() + 1) * sizeof(WCHAR), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+		if (pStringArg == NULL) {
+			L::Error("Failed to inject DLL (VirtualAllocEx) 0x%X, NezuLoader was injected but the selected DLL was not", GetLastError());
+			inj_res = false;
+			break;
+		}
+
+		if (!WriteProcessMemory(hCsProc, pStringArg, w_dll_path.c_str(), (w_dll_path.size() + 1) * sizeof(WCHAR), NULL)) {
+			VirtualFreeEx(hCsProc, pStringArg, 0, MEM_RELEASE);
+			L::Error("Failed to inject DLL (WriteProcessMemory) 0x%X, NezuLoader was injected but the selected DLL was not", GetLastError());
+			inj_res = false;
+			break;
+		}
+
+		HANDLE hNezuLoaderRemoteThread = CreateRemoteThread(hCsProc, NULL, 0, (LPTHREAD_START_ROUTINE)((DWORD)hRemoteModule + dwRemoteInjectFuncRVA), pStringArg, 0, NULL);
+		if (hNezuLoaderRemoteThread == NULL) {
+			VirtualFreeEx(hCsProc, pStringArg, 0, MEM_RELEASE);
+			L::Error("Failed to inject DLL (WriteProcessMemory) 0x%X, NezuLoader was injected but the selected DLL was not", GetLastError());
+			inj_res = false;
+			break;
+		}
+
+		DWORD wait_res = WaitForSingleObject(hNezuLoaderRemoteThread, 10000);
+		if (wait_res != WAIT_OBJECT_0) { //10 sec should be enough
+			L::Error("Failed to inject DLL (WaitForSingleObject) 0x%X, NezuLoader was injected but the selected DLL was not", wait_res == WAIT_FAILED ? GetLastError() : wait_res);
+			if (wait_res != WAIT_TIMEOUT) { //dont free if thread is still running
+				VirtualFreeEx(hCsProc, pStringArg, 0, MEM_RELEASE);
+			}
+			CloseHandle(hNezuLoaderRemoteThread);
+			inj_res = false;
+			break;
+		}
+
+		VirtualFreeEx(hCsProc, pStringArg, 0, MEM_RELEASE);
+
+		DWORD exit_code = 0;
+		if (!GetExitCodeThread(hNezuLoaderRemoteThread, &exit_code)) {
+			L::Error("Failed to inject DLL (GetExitCodeThread) 0x%X, NezuLoader was injected but the selected DLL was not", GetLastError());
+			CloseHandle(hNezuLoaderRemoteThread);
+			inj_res = false;
+			break;
+		}
+
+		CloseHandle(hNezuLoaderRemoteThread);
+
+		if (exit_code == FALSE) {
+			L::Error("NezuLoader returned an error while injecting DLL, check NezuLoader log from more details");
+			inj_res = false;
+			break;
+		}
+
+		inj_res = true;
+		break;
+	}
+	case InjectionMode::Dll:
+		inj_res = Injector::LoadLib(hCsProc, dll_path.c_str(), true);
+		break;
+	case InjectionMode::DllManual:
+		inj_res = Injector::ManualMap(hCsProc, dll_path.c_str());
+		break;
 	}
 
 	if (!inj_res) {
@@ -313,7 +471,7 @@ DWORD WINAPI LoaderThread(LPVOID lpThreadParameter) {
 
 	CloseHandle(hCsProc);
 
-	L::Info("DLL injected");
+	L::Info("Load successful");
 
 	return TRUE;
 }

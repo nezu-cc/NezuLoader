@@ -19,40 +19,43 @@
     <Filter Include="MinHook\hde">
       <UniqueIdentifier>{cde9fc79-b6e2-4d0c-8514-8ff884d98cdd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Crc32">
+      <UniqueIdentifier>{08b6fc22-6947-4f5b-9573-9d58aea9f241}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Crc32.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="NezuVac.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\NezuLoader\MinHook\hde\hde32.h">
-      <Filter>MinHook\hde</Filter>
-    </ClInclude>
-    <ClInclude Include="..\NezuLoader\MinHook\hde\pstdint.h">
-      <Filter>MinHook\hde</Filter>
-    </ClInclude>
-    <ClInclude Include="..\NezuLoader\MinHook\hde\table32.h">
-      <Filter>MinHook\hde</Filter>
-    </ClInclude>
-    <ClInclude Include="..\NezuLoader\MinHook\hde\table64.h">
-      <Filter>MinHook\hde</Filter>
-    </ClInclude>
-    <ClInclude Include="..\NezuLoader\MinHook\buffer.h">
-      <Filter>MinHook</Filter>
-    </ClInclude>
-    <ClInclude Include="..\NezuLoader\MinHook\MinHook.h">
-      <Filter>MinHook</Filter>
-    </ClInclude>
-    <ClInclude Include="..\NezuLoader\MinHook\trampoline.h">
-      <Filter>MinHook</Filter>
-    </ClInclude>
     <ClInclude Include="NezuVacStatus.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MinHook\hde\hde32.h">
+      <Filter>MinHook\hde</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MinHook\hde\pstdint.h">
+      <Filter>MinHook\hde</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MinHook\hde\table32.h">
+      <Filter>MinHook\hde</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MinHook\hde\table64.h">
+      <Filter>MinHook\hde</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MinHook\buffer.h">
+      <Filter>MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MinHook\MinHook.h">
+      <Filter>MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MinHook\trampoline.h">
+      <Filter>MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Crc32\Crc32.h">
+      <Filter>Crc32</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -62,23 +65,23 @@
     <ClCompile Include="pch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Crc32.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="NezuVac.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\NezuLoader\MinHook\hde\hde32.cpp">
+    <ClCompile Include="..\MinHook\hde\hde32.cpp">
       <Filter>MinHook\hde</Filter>
     </ClCompile>
-    <ClCompile Include="..\NezuLoader\MinHook\buffer.cpp">
+    <ClCompile Include="..\MinHook\buffer.cpp">
       <Filter>MinHook</Filter>
     </ClCompile>
-    <ClCompile Include="..\NezuLoader\MinHook\hook.cpp">
+    <ClCompile Include="..\MinHook\hook.cpp">
       <Filter>MinHook</Filter>
     </ClCompile>
-    <ClCompile Include="..\NezuLoader\MinHook\trampoline.cpp">
+    <ClCompile Include="..\MinHook\trampoline.cpp">
       <Filter>MinHook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Crc32\Crc32.cpp">
+      <Filter>Crc32</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -33,10 +33,11 @@ __forceinline bool table()
 }
 
 DWORD Crc32::hash(LPCVOID buf, DWORD len, DWORD init_crc) {
-	static bool once = []() {
+	static bool once = true;
+	if (once) {
 		table();
-		return true;
-	}();
+		once = false;
+	}
 
 	auto next = (const char*)buf;
 	DWORD64 crc = init_crc;

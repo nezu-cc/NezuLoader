@@ -80,11 +80,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)NezuVac;$(SolutionDir)$(SolutionName)\imgui;$(ProjectDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)Injector;$(SolutionDir)imgui;$(SolutionDir)NezuVac;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)NezuVac;$(SolutionDir)$(SolutionName)\imgui;$(ProjectDir);$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)Injector;$(SolutionDir)imgui;$(SolutionDir)NezuVac;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -129,13 +129,14 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(DXSDK_DIR)Include</AdditionalIncludeDirectories>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>NotSet</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d9.lib;dwmapi.lib;	Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;dwmapi.lib;Shlwapi.lib;DbgHelp.lib;WinInet.lib;Urlmon.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
@@ -151,13 +152,15 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(DXSDK_DIR)Include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <Optimization>Disabled</Optimization>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>NotSet</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d9.lib;dwmapi.lib;	Shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d9.lib;dwmapi.lib;Shlwapi.lib;DbgHelp.lib;WinInet.lib;Urlmon.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <ResourceCompile>
@@ -165,16 +168,19 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\NezuLoader\imgui\imgui.cpp" />
-    <ClCompile Include="..\NezuLoader\imgui\imgui_demo.cpp" />
-    <ClCompile Include="..\NezuLoader\imgui\imgui_draw.cpp" />
-    <ClCompile Include="..\NezuLoader\imgui\imgui_impl_dx9.cpp" />
-    <ClCompile Include="..\NezuLoader\imgui\imgui_impl_win32.cpp" />
-    <ClCompile Include="..\NezuLoader\imgui\imgui_stdlib.cpp" />
-    <ClCompile Include="..\NezuLoader\imgui\imgui_tables.cpp" />
-    <ClCompile Include="..\NezuLoader\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="..\NezuLoader\imgui\RobotoBold.cpp" />
-    <ClCompile Include="Injector.cpp" />
+    <ClCompile Include="..\imgui\icons.cpp" />
+    <ClCompile Include="..\imgui\imgui.cpp" />
+    <ClCompile Include="..\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\imgui\imgui_impl_dx9.cpp" />
+    <ClCompile Include="..\imgui\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\imgui\imgui_stdlib.cpp" />
+    <ClCompile Include="..\imgui\imgui_tables.cpp" />
+    <ClCompile Include="..\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="..\imgui\RobotoBold.cpp" />
+    <ClCompile Include="..\Injector\Injector.cpp" />
+    <ClCompile Include="Download Manager.cpp" />
+    <ClCompile Include="IProcess.cpp" />
     <ClCompile Include="Loader.cpp" />
     <ClCompile Include="LoaderLog.cpp" />
     <ClCompile Include="NezuInjector.cpp" />
@@ -183,29 +189,40 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Sandboxie.cpp" />
+    <ClCompile Include="Symbol Parser.cpp" />
     <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\NezuLoader\imgui\imgui.h" />
-    <ClInclude Include="..\NezuLoader\imgui\imgui_impl_dx9.h" />
-    <ClInclude Include="..\NezuLoader\imgui\imgui_impl_win32.h" />
-    <ClInclude Include="..\NezuLoader\imgui\imgui_internal.h" />
-    <ClInclude Include="..\NezuLoader\imgui\imgui_stdlib.h" />
-    <ClInclude Include="..\NezuLoader\imgui\imstb_rectpack.h" />
-    <ClInclude Include="..\NezuLoader\imgui\imstb_textedit.h" />
-    <ClInclude Include="..\NezuLoader\imgui\imstb_truetype.h" />
-    <ClInclude Include="..\NezuLoader\imgui\RobotoBold.h" />
-    <ClInclude Include="Injector.h" />
+    <ClInclude Include="..\imgui\icons.h" />
+    <ClInclude Include="..\imgui\imgui.h" />
+    <ClInclude Include="..\imgui\imgui_impl_dx9.h" />
+    <ClInclude Include="..\imgui\imgui_impl_win32.h" />
+    <ClInclude Include="..\imgui\imgui_internal.h" />
+    <ClInclude Include="..\imgui\imgui_stdlib.h" />
+    <ClInclude Include="..\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\imgui\imstb_truetype.h" />
+    <ClInclude Include="..\imgui\RobotoBold.h" />
+    <ClInclude Include="..\Injector\Injector.h" />
+    <ClInclude Include="Download Manager.h" />
+    <ClInclude Include="inipp.h" />
+    <ClInclude Include="IProcess.h" />
     <ClInclude Include="Loader.h" />
     <ClInclude Include="LoaderLog.h" />
     <ClInclude Include="NezuVacInterface.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Sandboxie.h" />
+    <ClInclude Include="Symbol Parser.h" />
     <ClInclude Include="Undocumented.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\Downloads\syringfgewge.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -425,3 +425,4 @@ typedef struct _LDR_DATA_TABLE_ENTRY
     ULONG DependentLoadFlags;
     UCHAR SigningLevel; // Since Windows 10 RS2
 } LDR_DATA_TABLE_ENTRY, * PLDR_DATA_TABLE_ENTRY;
+

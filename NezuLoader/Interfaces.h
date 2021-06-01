@@ -1,9 +1,9 @@
 #pragma once
-#include "steam/isteamfriends.h"
-#include "steam/isteammatchmaking.h"
-#include "steam/isteamutils.h"
-#include "steam/isteamuser.h"
-#include "steam/isteamgamecoordinator.h"
+#include "isteamfriends.h"
+#include "isteammatchmaking.h"
+#include "isteamutils.h"
+#include "isteamuser.h"
+#include "isteamgamecoordinator.h"
 
 namespace I {
 	void CaptureInterfaces();
@@ -13,4 +13,14 @@ namespace I {
 	extern ISteamUser* SteamUser;
 	extern ISteamGameCoordinator* SteamGameCoordinator;
 	extern ISurface* Surface;
+	extern IEngine* Engine;
+	extern IClientEntityList* ClientEntityList;
+	extern IInputSystem* InputSystem;
+	extern MatchFramework* IMatchFramework;
+	extern IGameEventManager* GameEventManager;
+	extern IBaseClientDll* Client;
+	extern IPanoramaUIEngine* PanoramaUIEngine;
+	extern IClientState* ClientState;
+	extern IMaterialSystem* MaterialSystem;
+	extern ICVar* CVar;
 }

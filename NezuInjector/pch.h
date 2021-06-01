@@ -35,6 +35,9 @@
 #include <Shlobj.h>
 #include <shlwapi.h>
 #include <mutex>
+#include <dbghelp.h>
+#include <wininet.h>
+#include <future>
 
 #pragma warning( push )
 #pragma warning( disable : 6387 6451 6387 6011 28182 6255 26495 6031 26812 6031 26551 )
@@ -48,5 +51,9 @@
 #include "LoaderLog.h"
 #include "Undocumented.h"
 #include "Util.h"
+#include "IProcess.h"
+#include "Sandboxie.h"
+#include "inipp.h"
+#include "Symbol Parser.h"
 
 #endif //PCH_H

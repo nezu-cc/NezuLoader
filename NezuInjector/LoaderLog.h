@@ -17,6 +17,7 @@ namespace L {
 	void Error(const char* fmt, ...);
 	void Clear();
 	void SetHwndToNotify(HWND hwnd);
+	void SuppressAllMessages(bool suppress);
 	
 	extern std::mutex lock;
 	extern std::vector<std::tuple<MessageType, std::string>> messages;

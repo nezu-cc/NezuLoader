@@ -25,31 +25,31 @@
     <Filter Include="Source Files\Hooks">
       <UniqueIdentifier>{1e3abb82-91e7-4882-b233-7d1bf609511e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\steam">
-      <UniqueIdentifier>{e909f65a-f8b2-4ec6-9d25-42e17a635815}</UniqueIdentifier>
+    <Filter Include="Injector">
+      <UniqueIdentifier>{04b54b2e-b1f1-4771-b834-0501f389b970}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="steam">
+      <UniqueIdentifier>{78928846-ed5e-42df-81be-b7b3ccd8c027}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loaders">
+      <UniqueIdentifier>{48e159f5-9617-4e33-b087-108f95a62e3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Crc32">
+      <UniqueIdentifier>{4642a832-c28c-484b-852a-7401d79c31fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Mods">
+      <UniqueIdentifier>{02ad190f-84bc-4c6f-842c-4fc3c45d947c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="protobuf">
+      <UniqueIdentifier>{bacbd4ac-f72e-49eb-a5c9-440704d99d43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SDK">
+      <UniqueIdentifier>{3c31193c-6f56-41c7-930d-9359d296b260}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MinHook\hde\hde32.h">
-      <Filter>MinHook\hde</Filter>
-    </ClInclude>
-    <ClInclude Include="MinHook\hde\pstdint.h">
-      <Filter>MinHook\hde</Filter>
-    </ClInclude>
-    <ClInclude Include="MinHook\hde\table32.h">
-      <Filter>MinHook\hde</Filter>
-    </ClInclude>
-    <ClInclude Include="MinHook\buffer.h">
-      <Filter>MinHook</Filter>
-    </ClInclude>
-    <ClInclude Include="MinHook\MinHook.h">
-      <Filter>MinHook</Filter>
-    </ClInclude>
-    <ClInclude Include="MinHook\trampoline.h">
-      <Filter>MinHook</Filter>
     </ClInclude>
     <ClInclude Include="Hooks.h">
       <Filter>Header Files</Filter>
@@ -63,168 +63,6 @@
     <ClInclude Include="Structs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="steam\isteamapplist.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamapps.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamappticket.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamclient.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamcontroller.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamfriends.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamgamecoordinator.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamgameserver.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamgameserverstats.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamhtmlsurface.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamhttp.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteaminput.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteaminventory.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteammasterserverupdater.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteammatchmaking.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteammusic.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteammusicremote.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamnetworking.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamnetworkingmessages.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamnetworkingsockets.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamnetworkingutils.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamparentalsettings.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamps3overlayrenderer.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamremoteplay.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamremotestorage.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamscreenshots.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamugc.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamuser.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamuserstats.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamutils.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\isteamvideo.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\matchmakingtypes.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\steam_api.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\steam_api_common.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\steam_api_flat.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\steam_api_internal.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\steam_gameserver.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\steamclientpublic.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\steamdatagram_tickets.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\steamencryptedappticket.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\steamhttpenums.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\steamnetworkingtypes.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\steamps3params.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\steamtypes.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="steam\steamuniverse.h">
-      <Filter>Header Files\steam</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imgui.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imgui_impl_dx9.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imgui_impl_win32.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imgui_internal.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imgui_stdlib.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imstb_rectpack.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imstb_textedit.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imstb_truetype.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\RobotoBold.h">
-      <Filter>imgui</Filter>
-    </ClInclude>
     <ClInclude Include="Util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -236,6 +74,252 @@
     </ClInclude>
     <ClInclude Include="NezuLoader.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imgui.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imgui_impl_dx9.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imgui_impl_win32.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imgui_internal.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imgui_stdlib.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imstb_rectpack.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imstb_textedit.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\imstb_truetype.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\RobotoBold.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MinHook\hde\hde32.h">
+      <Filter>MinHook\hde</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MinHook\hde\pstdint.h">
+      <Filter>MinHook\hde</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MinHook\hde\table32.h">
+      <Filter>MinHook\hde</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MinHook\hde\table64.h">
+      <Filter>MinHook\hde</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MinHook\buffer.h">
+      <Filter>MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MinHook\MinHook.h">
+      <Filter>MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MinHook\trampoline.h">
+      <Filter>MinHook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Injector\Injector.h">
+      <Filter>Injector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamapplist.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamapps.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamappticket.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamclient.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamcontroller.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamfriends.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamgamecoordinator.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamgameserver.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamgameserverstats.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamhtmlsurface.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamhttp.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteaminput.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteaminventory.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteammasterserverupdater.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteammatchmaking.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteammusic.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteammusicremote.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamnetworking.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamnetworkingmessages.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamnetworkingsockets.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamnetworkingutils.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamparentalsettings.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamps3overlayrenderer.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamremoteplay.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamremotestorage.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamscreenshots.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamugc.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamuser.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamuserstats.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamutils.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\isteamvideo.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\matchmakingtypes.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\steam_api.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\steam_api_common.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\steam_api_flat.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\steam_api_internal.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\steam_gameserver.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\steamclientpublic.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\steamdatagram_tickets.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\steamencryptedappticket.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\steamhttpenums.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\steamnetworkingtypes.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\steamps3params.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\steamtypes.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\steam\steamuniverse.h">
+      <Filter>steam</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Crc32\Crc32.h">
+      <Filter>Crc32</Filter>
+    </ClInclude>
+    <ClInclude Include="CheatMod.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_custom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imgui\icons.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="OTC3ModPack.h">
+      <Filter>Source Files\Mods</Filter>
+    </ClInclude>
+    <ClInclude Include="Cheat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCoordinator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="protobuf\pb_common.h">
+      <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="protobuf\pb_decode.h">
+      <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="protobuf\pb_encode.h">
+      <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="protobuf\pb.h">
+      <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="protobuf\messages.pb.h">
+      <Filter>protobuf</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEventListener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fnv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NetVarManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Visuals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\clzss.h">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\bitbuf.h">
+      <Filter>SDK</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -254,33 +338,6 @@
     <ClCompile Include="Memory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_demo.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_draw.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_impl_dx9.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_impl_win32.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_stdlib.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_tables.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_widgets.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\RobotoBold.cpp">
-      <Filter>imgui</Filter>
-    </ClCompile>
     <ClCompile Include="Util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -296,23 +353,148 @@
     <ClCompile Include="WndProc.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
-    <ClCompile Include="LockCursor.cpp">
-      <Filter>Source Files\Hooks</Filter>
-    </ClCompile>
     <ClCompile Include="NezuLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MinHook\buffer.cpp">
-      <Filter>MinHook</Filter>
+    <ClCompile Include="..\imgui\imgui.cpp">
+      <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="MinHook\hook.cpp">
-      <Filter>MinHook</Filter>
+    <ClCompile Include="..\imgui\imgui_demo.cpp">
+      <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="MinHook\trampoline.cpp">
-      <Filter>MinHook</Filter>
+    <ClCompile Include="..\imgui\imgui_draw.cpp">
+      <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="MinHook\hde\hde32.cpp">
+    <ClCompile Include="..\imgui\imgui_impl_dx9.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui_impl_win32.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui_stdlib.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui_tables.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\imgui_widgets.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\RobotoBold.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MinHook\hde\hde32.cpp">
       <Filter>MinHook\hde</Filter>
     </ClCompile>
+    <ClCompile Include="..\MinHook\buffer.cpp">
+      <Filter>MinHook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MinHook\hook.cpp">
+      <Filter>MinHook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\MinHook\trampoline.cpp">
+      <Filter>MinHook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Injector\Injector.cpp">
+      <Filter>Injector</Filter>
+    </ClCompile>
+    <ClCompile Include="OTC3Loader.cpp">
+      <Filter>Source Files\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Crc32\Crc32.cpp">
+      <Filter>Crc32</Filter>
+    </ClCompile>
+    <ClCompile Include="CheatMod.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CheatLoader.cpp">
+      <Filter>Source Files\Loaders</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_custom.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\imgui\icons.cpp">
+      <Filter>imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="OTC3ModPack.cpp">
+      <Filter>Source Files\Mods</Filter>
+    </ClCompile>
+    <ClCompile Include="Cheat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameCoordinator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LockCursor.cpp">
+      <Filter>Source Files\Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="Steam.cpp">
+      <Filter>Source Files\Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="HasPrime.cpp">
+      <Filter>Source Files\Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="protobuf\pb_common.cpp">
+      <Filter>protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="protobuf\pb_decode.cpp">
+      <Filter>protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="protobuf\pb_encode.cpp">
+      <Filter>protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="protobuf\messages.pb.cpp">
+      <Filter>protobuf</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEventListener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CGameUI.cpp">
+      <Filter>Source Files\Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="FrameStageNotify.cpp">
+      <Filter>Source Files\Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Source Files\Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="LobbyAPI.cpp">
+      <Filter>Source Files\Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="CLobbyMenu.cpp">
+      <Filter>Source Files\Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="NetVarManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Visuals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle.cpp">
+      <Filter>Source Files\Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="CVoiceStatus.cpp">
+      <Filter>Source Files\Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="Crasher.cpp">
+      <Filter>Source Files\Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\clzss.cpp">
+      <Filter>SDK</Filter>
+    </ClCompile>
+    <ClCompile Include="SDK\bitbuf.cpp">
+      <Filter>SDK</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="protobuf\messages.proto">
+      <Filter>protobuf</Filter>
+    </None>
   </ItemGroup>
 </Project>

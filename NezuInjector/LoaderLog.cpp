@@ -4,8 +4,11 @@
 std::mutex L::lock;
 std::vector<std::tuple<MessageType, std::string>> L::messages;
 HWND notify_hwnd = NULL;
+bool suppressed = false;
 
 void L::MessageV(MessageType type, const char* fmt, va_list args) {
+    if (suppressed)
+        return;
     SIZE_T bufsz = vsnprintf(NULL, 0, fmt, args) + 1;
     char* buf = new char[bufsz];
     vsnprintf(buf, bufsz, fmt, args);
@@ -63,4 +66,8 @@ void L::Clear() {
 
 void L::SetHwndToNotify(HWND hwnd) {
     notify_hwnd = hwnd;
+}
+
+void L::SuppressAllMessages(bool suppress) {
+    suppressed = suppress;
 }

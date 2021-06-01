@@ -51,12 +51,22 @@ END
 //
 
 #ifdef _DEBUG
-IDR_RCDATA1             RCDATA                  "..\\..\\Debug\\NezuVac.dll"
-IDR_RCDATA2             RCDATA                  "..\\..\\Debug\\NezuLoader.dll"
+IDR_RCDATA1             RCDATA                  "..\\Debug\\NezuVac.dll"
+IDR_RCDATA2             RCDATA                  "..\\Debug\\NezuLoader.dll"
 #else //_DEBUG
-IDR_RCDATA1             RCDATA                  "..\\..\\Release\\NezuVac.dll"
-IDR_RCDATA2             RCDATA                  "..\\..\\Release\\NezuLoader.dll"
+IDR_RCDATA1             RCDATA                  "..\\Release\\NezuVac.dll"
+IDR_RCDATA2             RCDATA                  "..\\Release\\NezuLoader.dll"
 #endif //_DEBUG
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON                    "res\\syringfgewge.ico"
 
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////

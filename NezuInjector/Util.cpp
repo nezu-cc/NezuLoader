@@ -21,7 +21,6 @@ std::string U::DllFilePicker(HWND owner) {
 
     if (GetOpenFileName(&ofn)) {
         return TCHARUTF8(filename);
-        _ftprintf(stdout, _T("You chose the file %s\n"), filename);
     }
     return "";
 }
@@ -95,118 +94,24 @@ BOOL U::Set_DontCallForThreads(HANDLE hProc, const WCHAR* cMod, bool set) {
 }
 
 /// <summary>
-/// find first process with given name
-/// </summary>
-/// <param name="name">name of the process</param>
-/// <returns>PID or 0 if none found</returns>
-DWORD U::FindProcess(LPCTSTR name) {
-    PROCESSENTRY32 PE32{ 0 };
-    PE32.dwSize = sizeof(PE32);
-
-    HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (hSnap == INVALID_HANDLE_VALUE)
-        return 0;
-
-    DWORD PID = 0;
-    BOOL bRet = Process32First(hSnap, &PE32);
-    while (bRet) {
-        if (!_tcsicmp(name, PE32.szExeFile)) {
-            PID = PE32.th32ProcessID;
-            break;
-        }
-        bRet = Process32Next(hSnap, &PE32);
-    }
-
-    CloseHandle(hSnap);
-
-    return PID;
-}
-
-/// <summary>
-/// Tries to kill all proceses with given filename
-/// </summary>
-/// <param name="name">name of the process</param>
-/// <returns>number of proceses that failed to be killed or (DWORD)-1 on failure</returns>
-DWORD U::KillAll(LPCTSTR name) {
-    DWORD failed = 0;
-
-    L::Debug("Killing all %s proceses", TCHARUTF8(name).c_str());
-
-    PROCESSENTRY32 PE32{ 0 };
-    PE32.dwSize = sizeof(PE32);
-
-    HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (hSnap == INVALID_HANDLE_VALUE) {
-        L::Error("Failed to kill all %s (CreateToolhelp32Snapshot) 0x%X", TCHARUTF8(name).c_str(), GetLastError());
-        return (DWORD)-1;
-    }
-
-    BOOL bRet = Process32First(hSnap, &PE32);
-    while (bRet) {
-        if (!_tcsicmp(name, PE32.szExeFile)) {
-            HANDLE hProc = OpenProcess(PROCESS_TERMINATE, FALSE, PE32.th32ProcessID);
-            if (hProc) {
-                if (!TerminateProcess(hProc, 1)) {
-                    L::Error("Failed to kill %s(%d) (TerminateProcess) 0x%X", TCHARUTF8(name).c_str(), PE32.th32ProcessID, GetLastError());
-                    failed++;
-                }
-                else L::Info("Killed process %s(%d)", TCHARUTF8(name).c_str(), PE32.th32ProcessID);
-                CloseHandle(hProc);
-            }
-            else {
-                L::Error("Failed to kill %s(%d) (OpenProcess) 0x%X", TCHARUTF8(name).c_str(), PE32.th32ProcessID, GetLastError());
-                failed++;
-            }
-        }
-        bRet = Process32Next(hSnap, &PE32);
-    }
-
-    CloseHandle(hSnap);
-
-    return failed;
-}
-
-/// <summary>
-/// Checks if a process is running
-/// </summary>
-/// <param name="name">name of the process</param>
-/// <returns>TRUE if at least one process with a given name is running, FALSE otherwise</returns>
-BOOL U::IsProcessOpen(LPCTSTR name) {
-    PROCESSENTRY32 PE32{ 0 };
-    PE32.dwSize = sizeof(PE32);
-
-    HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
-    if (hSnap == INVALID_HANDLE_VALUE)
-        return (DWORD)-1;
-
-    BOOL bRet = Process32First(hSnap, &PE32);
-    while (bRet) {
-        if (!_tcsicmp(name, PE32.szExeFile)) {
-            CloseHandle(hSnap);
-            return true;
-        }
-        bRet = Process32Next(hSnap, &PE32);
-    }
-
-    CloseHandle(hSnap);
-
-    return false;
-}
-
-/// <summary>
 /// Finds the address of a module in a remote process
 /// </summary>
 /// <param name="hProc">handle to the target process</param>
 /// <param name="name">name of the module</param>
-/// <param name="address">address if the module if found</param>
+/// <param name="address">address if the module if found (may be NULL)</param>
 /// <returns>TRUE if no error occurred(address will be set to NULL if module not found) and FALSE on failure</returns>
 BOOL U::FindRemoteDll(HANDLE hProc, LPCTSTR name, HMODULE* address) {
 
     DWORD cbNeeded = 0;
-    if (!EnumProcessModules(hProc, NULL, 0, &cbNeeded)) {
-        L::Error("EnumProcessModules failed 0x%X", GetLastError());
-        *address = NULL;
-        return FALSE;
+    DWORD tries = 0;
+    while (!EnumProcessModules(hProc, NULL, 0, &cbNeeded)) {
+        Sleep(100);//problem reading memory, just wait. The process is propably not initalised yet
+        tries++;
+        if (tries == 50) {//5 seconds
+            L::Error("EnumProcessModules failed 0x%X", GetLastError());
+            *address = NULL;
+            return FALSE;
+        }
     }
 
     int module_count = cbNeeded / sizeof(HMODULE) + 20;
@@ -246,4 +151,128 @@ BOOL U::FindRemoteDll(HANDLE hProc, LPCTSTR name, HMODULE* address) {
     *address = NULL;
     delete[] modules;
     return TRUE;
+}
+
+/// <summary>
+/// Gets the RVA or a exported function
+/// </summary>
+/// <param name="pAssembly">pointer to buffer countaining a DLL file</param>
+/// <param name="lpProcName">name of the export to find(dosn't support ordinals)</param>
+/// <returns>RVA on success or 0 if not found</returns>
+DWORD U::GetExportFuncRVA(const PBYTE pAssembly, LPCSTR lpProcName) {
+    PIMAGE_DOS_HEADER dos_hdr = (PIMAGE_DOS_HEADER)pAssembly;
+    PIMAGE_NT_HEADERS nt_hdr = (PIMAGE_NT_HEADERS)(pAssembly + dos_hdr->e_lfanew);
+    PIMAGE_OPTIONAL_HEADER opt_hdr = &nt_hdr->OptionalHeader;
+    PIMAGE_FILE_HEADER file_hdr = &nt_hdr->FileHeader;
+
+    //map all sections so we can use virtual addresses
+    PBYTE mapped = new BYTE[opt_hdr->SizeOfImage];
+    auto* section_hdr = IMAGE_FIRST_SECTION(nt_hdr);
+    for (UINT i = 0; i != file_hdr->NumberOfSections; ++i, ++section_hdr)
+        if (section_hdr->SizeOfRawData)
+            memcpy(mapped + section_hdr->VirtualAddress, pAssembly + section_hdr->PointerToRawData, section_hdr->SizeOfRawData);
+
+    PIMAGE_DATA_DIRECTORY data_dir = (PIMAGE_DATA_DIRECTORY)&opt_hdr->DataDirectory[IMAGE_DIRECTORY_ENTRY_EXPORT];
+    PIMAGE_EXPORT_DIRECTORY export_dir = (PIMAGE_EXPORT_DIRECTORY)(mapped + data_dir->VirtualAddress);
+
+    DWORD* addresses = (DWORD*)(mapped + export_dir->AddressOfFunctions);
+    DWORD* names = (DWORD*)(mapped + export_dir->AddressOfNames);
+    WORD* names_ordinals = (WORD*)(mapped + export_dir->AddressOfNameOrdinals);
+
+    DWORD i = export_dir->NumberOfNames;
+    while (i--) {
+        char* name = (char*)(mapped + *names);
+#pragma warning( suppress : 6001 ) //no, we're infact not using uninitialized memory
+        if (!strcmp(name, lpProcName)) {
+            addresses += *names_ordinals;
+            DWORD RVA = *addresses;
+            delete[] mapped;
+            return RVA;
+        }
+        names++;
+        names_ordinals++;
+    }
+    delete[] mapped;
+    return 0;
+}
+
+/// <summary>
+/// Finds the binary path for a given service
+/// </summary>
+/// <param name="cName">name of the service</param>
+/// <param name="cBinPath">buffer for the returned path</param>
+/// <param name="buffSize">size of cBinPath</param>
+/// <returns>TRUE on success FALSE otherwise</returns>
+BOOL U::GetServiceBinaryPath(LPCTSTR cName, LPTSTR cBinPath, DWORD buffSize) {
+
+    SC_HANDLE schSCManager = OpenSCManager(NULL, NULL, SC_MANAGER_ALL_ACCESS);
+    if (!schSCManager)
+        return FALSE;
+
+    SC_HANDLE schService = OpenService(schSCManager, cName, SERVICE_QUERY_CONFIG);
+    if (!schService) {
+        CloseServiceHandle(schSCManager);
+        return FALSE;
+    }
+
+    DWORD dwBytesNeeded = 0;
+    if (!QueryServiceConfig(schService, NULL, 0, &dwBytesNeeded) && GetLastError() != ERROR_INSUFFICIENT_BUFFER) {
+        CloseServiceHandle(schService);
+        CloseServiceHandle(schSCManager);
+        return FALSE;
+    }
+
+    if (!dwBytesNeeded) {
+        CloseServiceHandle(schService);
+        CloseServiceHandle(schSCManager);
+        return FALSE;
+    }
+
+    LPQUERY_SERVICE_CONFIG lpsc = (LPQUERY_SERVICE_CONFIG)LocalAlloc(LMEM_FIXED, dwBytesNeeded);
+    if (!lpsc) {
+        CloseServiceHandle(schService);
+        CloseServiceHandle(schSCManager);
+        return FALSE;
+    }
+
+    if (!QueryServiceConfig(schService, lpsc, dwBytesNeeded, &dwBytesNeeded)) {
+        CloseServiceHandle(schService);
+        CloseServiceHandle(schSCManager);
+        LocalFree(lpsc);
+        return FALSE;
+    }
+
+    _tcscpy_s(cBinPath, buffSize, lpsc->lpBinaryPathName);
+
+    CloseServiceHandle(schService);
+    CloseServiceHandle(schSCManager);
+    LocalFree(lpsc);
+
+    return TRUE;
+
+}
+
+BOOL U::SetDebugPrivilege(BOOL enable) {
+
+    HANDLE hToken = NULL;
+    if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken))
+        return FALSE;
+
+    TOKEN_PRIVILEGES tp = { 0 };
+    if (!LookupPrivilegeValue(NULL, L"SeDebugPrivilege", &tp.Privileges[0].Luid)) {
+        CloseHandle(hToken);
+        return FALSE;
+    }
+
+    tp.PrivilegeCount = 1;
+    tp.Privileges[0].Attributes = enable ? SE_PRIVILEGE_ENABLED : SE_PRIVILEGE_USED_FOR_ACCESS;
+
+    if (!AdjustTokenPrivileges(hToken, FALSE, &tp, sizeof(TOKEN_PRIVILEGES), nullptr, 0)) {
+        CloseHandle(hToken);
+        return FALSE;
+    }
+
+    CloseHandle(hToken);
+    return TRUE;
+
 }

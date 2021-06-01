@@ -72,11 +72,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)$(SolutionName)\MinHook;$(ProjectDir);$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)Crc32;$(SolutionDir)MinHook;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)$(SolutionName)\MinHook;$(ProjectDir);$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)Crc32;$(SolutionDir)MinHook;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -92,6 +92,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <SupportJustMyCode>false</SupportJustMyCode>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -153,24 +155,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\NezuLoader\MinHook\buffer.h" />
-    <ClInclude Include="..\NezuLoader\MinHook\hde\hde32.h" />
-    <ClInclude Include="..\NezuLoader\MinHook\hde\pstdint.h" />
-    <ClInclude Include="..\NezuLoader\MinHook\hde\table32.h" />
-    <ClInclude Include="..\NezuLoader\MinHook\hde\table64.h" />
-    <ClInclude Include="..\NezuLoader\MinHook\MinHook.h" />
-    <ClInclude Include="..\NezuLoader\MinHook\trampoline.h" />
-    <ClInclude Include="Crc32.h" />
+    <ClInclude Include="..\Crc32\Crc32.h" />
+    <ClInclude Include="..\MinHook\buffer.h" />
+    <ClInclude Include="..\MinHook\hde\hde32.h" />
+    <ClInclude Include="..\MinHook\hde\pstdint.h" />
+    <ClInclude Include="..\MinHook\hde\table32.h" />
+    <ClInclude Include="..\MinHook\hde\table64.h" />
+    <ClInclude Include="..\MinHook\MinHook.h" />
+    <ClInclude Include="..\MinHook\trampoline.h" />
     <ClInclude Include="NezuVac.h" />
     <ClInclude Include="NezuVacStatus.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\NezuLoader\MinHook\buffer.cpp" />
-    <ClCompile Include="..\NezuLoader\MinHook\hde\hde32.cpp" />
-    <ClCompile Include="..\NezuLoader\MinHook\hook.cpp" />
-    <ClCompile Include="..\NezuLoader\MinHook\trampoline.cpp" />
-    <ClCompile Include="Crc32.cpp" />
+    <ClCompile Include="..\Crc32\Crc32.cpp" />
+    <ClCompile Include="..\MinHook\buffer.cpp" />
+    <ClCompile Include="..\MinHook\hde\hde32.cpp" />
+    <ClCompile Include="..\MinHook\hook.cpp" />
+    <ClCompile Include="..\MinHook\trampoline.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="NezuVac.cpp" />
     <ClCompile Include="pch.cpp">

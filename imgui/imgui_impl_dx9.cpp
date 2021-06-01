@@ -125,6 +125,11 @@ void ImGui_ImplDX9_RenderDrawData(ImDrawData* draw_data)
     IDirect3DStateBlock9* d3d9_state_block = NULL;
     if (g_pd3dDevice->CreateStateBlock(D3DSBT_ALL, &d3d9_state_block) < 0)
         return;
+    if (d3d9_state_block->Capture() < 0)
+    {
+        d3d9_state_block->Release();
+        return;
+    }
 
     // Backup the DX9 transform (DX9 documentation suggests that it is included in the StateBlock but it doesn't appear to)
     D3DMATRIX last_world, last_view, last_projection;
