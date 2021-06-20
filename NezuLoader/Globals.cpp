@@ -3,6 +3,11 @@
 
 namespace G {
 
+#ifdef _DEBUG
+	bool debug = true;
+#else
+	bool debug = false;
+#endif
 	bool unload = false;
 	bool AutoInviteOnUiChange = false;
 	IUIPanel* MainMenuPanel = NULL;

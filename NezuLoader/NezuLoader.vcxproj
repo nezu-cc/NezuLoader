@@ -176,6 +176,7 @@
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Hooks.h" />
     <ClInclude Include="imgui_custom.h" />
+    <ClInclude Include="imgui_memory_editor.h" />
     <ClInclude Include="Interfaces.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Memory.h" />

@@ -6,6 +6,7 @@ class Entity;
 
 namespace G {
 	
+	extern bool debug;
 	extern bool unload;
 	extern bool AutoInviteOnUiChange;
 	extern IUIPanel* MainMenuPanel;

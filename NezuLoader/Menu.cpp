@@ -247,6 +247,8 @@ void Menu::Draw(IDirect3DDevice9* pDevice) {
             ImGui::InputText("##selectedconfigname", &configname);
             list_size += ImGui::GetItemRectSize().y + style.ItemSpacing.y;
 
+            G::debug = configname == "enable debug";
+
             static float buttonH = 20;
             if (ImGui::Button("Load", ImVec2(ImGui::GetContentRegionAvailWidth() - (textures.reload != NULL ? buttonH + style.ItemSpacing.x : 0), 0))) {
                 if (selected_config_index < Cfg::configs.size())
@@ -315,23 +317,23 @@ void Menu::Draw(IDirect3DDevice9* pDevice) {
         ImGui::End();
     }
     
-#if _DEBUG & 1
-    ImGui::SetNextWindowPos(ImGui::GetIO().DisplaySize, ImGuiCond_Appearing, ImVec2(1, 1));
-    ImGui::Begin("Debug", NULL, ImGuiWindowFlags_AlwaysAutoResize); {
-        if (ImGui::Button("unload"))
-            G::unload = true;
-        if (ImGui::Button("aim botz"))
-            I::Engine->ClientCmd_Unrestricted("map workshop\\243702660\\aim_botz");
-        if (ImGui::Button("Debug Magic :0")) {
+    if (G::debug) {
+        ImGui::SetNextWindowPos(ImGui::GetIO().DisplaySize, ImGuiCond_Appearing, ImVec2(1, 1));
+        ImGui::Begin("Debug", NULL, ImGuiWindowFlags_AlwaysAutoResize); {
+            if (ImGui::Button("unload"))
+                G::unload = true;
+            if (ImGui::Button("aim botz"))
+                I::Engine->ClientCmd_Unrestricted("map workshop\\243702660\\aim_botz");
+            if (ImGui::Button("Debug Magic :0")) {
+            }
+
+            ImGui::End();
         }
 
-        ImGui::End();
+        ImGui::SetNextWindowPos(ImGui::GetIO().DisplaySize* ImVec2(0.5, 0), ImGuiCond_Appearing, ImVec2(0.5, 0));
+        ImGui::SetNextWindowCollapsed(true, ImGuiCond_Appearing);
+        ImGui::ShowDemoWindow();
     }
-
-    ImGui::SetNextWindowPos(ImGui::GetIO().DisplaySize* ImVec2(0.5, 0), ImGuiCond_Appearing, ImVec2(0.5, 0));
-    ImGui::SetNextWindowCollapsed(true, ImGuiCond_Appearing);
-    ImGui::ShowDemoWindow();
-#endif // _DEBUG
 
 }
 
@@ -646,8 +648,6 @@ void Menu::DrawToolsTab(IDirect3DDevice9* pDevice) {
                     w_heigth = ImGui::GetCursorPos().y;
                     ImGui::EndChild();
                 }
-#ifdef _DEBUG
-                {//debug
                     static float w_heigth = 0;
                     ImGui::BeginChildWithTitle("Debug", ImVec2(avail_w, w_heigth)); {
                         ImGui::Text("Lobby ID: %llu", lobby_id.ConvertToUint64());
@@ -678,7 +678,6 @@ void Menu::DrawToolsTab(IDirect3DDevice9* pDevice) {
                     w_heigth = ImGui::GetCursorPos().y;
                     ImGui::EndChild();
                 }
-#endif // _DEBUG
 
                 ImGui::SetCursorPos(ImGui::GetCursorPos() + ImVec2(0, ImGui::GetStyle().WindowPadding.y / 2));//fix broken padding
             }
@@ -728,8 +727,6 @@ void Menu::DrawToolsTab(IDirect3DDevice9* pDevice) {
                     ImGui::EndChild();
                 }
                 
-#ifdef _DEBUG
-                {//debug
                     static float w_heigth = 0;
                     ImGui::BeginChildWithTitle("Debug", ImVec2(avail_w, w_heigth)); {
                         static std::string js_textbox = "";
@@ -742,7 +739,6 @@ void Menu::DrawToolsTab(IDirect3DDevice9* pDevice) {
                     w_heigth = ImGui::GetCursorPos().y;
                     ImGui::EndChild();
                 }
-#endif // _DEBUG
 
                 ImGui::SetCursorPos(ImGui::GetCursorPos() + ImVec2(0, ImGui::GetStyle().WindowPadding.y / 2));//fix broken padding
             }
@@ -791,6 +787,51 @@ void Menu::DrawToolsTab(IDirect3DDevice9* pDevice) {
 
             ImGui::EndTabItem();
         }
+
+        if (G::debug && ImGui::BeginTabItem("DEBUG")) {
+            ImGui::GetCurrentWindow()->DC.CursorPos.y -= ImGui::GetStyle().ItemSpacing.y;//no padding from top
+            ImGui::PushStyleColor(ImGuiCol_ChildBg, ImVec4(0, 0, 0, 0));
+            if (ImGui::BeginChild("###tools_tab_cont", ImGui::GetContentRegionAvail())) {
+                ImGui::PopStyleColor();
+                ImGui::GetCurrentWindow()->DC.CursorPos.y += ImGui::GetStyle().ItemSpacing.y;//add padding back
+
+                const float avail_w = ImGui::GetContentRegionAvail().x - 2;
+
+                {//memory
+                    static float w_heigth = 0;
+                    ImGui::BeginChildWithTitle("Memory", ImVec2(avail_w, w_heigth)); {
+
+                        static MemoryEditor mem_edit_1;
+                        mem_edit_1.ReadOnly = true;
+                        static BYTE data[0x100];
+
+                        static char AddrInputBuf[32] = "0";
+                        if (ImGui::InputText("addr", AddrInputBuf, IM_ARRAYSIZE(AddrInputBuf), ImGuiInputTextFlags_CharsHexadecimal | ImGuiInputTextFlags_EnterReturnsTrue))
+                        {
+                            size_t goto_addr;
+                            if (sscanf(AddrInputBuf, "%IX", &goto_addr) == 1) {
+                                if (!IsBadReadPtr((void*)goto_addr, sizeof(data))) {
+                                    memcpy(data, (void*)goto_addr, sizeof(data));
+                                }
+                            }
+                        }
+
+                        mem_edit_1.DrawWindow("MEM", data, sizeof(data));
+
+                    }
+                    w_heigth = ImGui::GetCursorPos().y;
+                    ImGui::EndChild();
+                }
+
+                ImGui::SetCursorPos(ImGui::GetCursorPos() + ImVec2(0, ImGui::GetStyle().WindowPadding.y / 2));//fix broken padding
+            }
+            else ImGui::PopStyleColor();
+            ImGui::EndChild();
+
+            ImGui::EndTabItem();
+        }
+
+
         ImGui::EndTabBar();
     }
 

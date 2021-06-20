@@ -321,6 +321,9 @@
     <ClInclude Include="SDK\bitbuf.h">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="imgui_memory_editor.h">
+      <Filter>imgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
