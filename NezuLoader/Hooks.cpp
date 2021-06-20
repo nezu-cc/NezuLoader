@@ -10,7 +10,7 @@ void H::ApplyHooks() {
 	oHookedPresent = (f_Present)MH_HookVtbl(M::d3d9Device, 17, &Hooked_Present); if (!oHookedPresent) printf("Failed to hook Present\n");
 	oHooked_Reset = (f_Reset)MH_HookVtbl(M::d3d9Device, 16, &Hooked_Reset); if (!oHooked_Reset) printf("Failed to hook Reset\n");
 	oHooked_LockCursor = (f_LockCursor)MH_HookVtbl(I::Surface, 67, &Hooked_LockCursor); if (!oHooked_LockCursor) printf("Failed to hook LockCursor\n");
-	oHasPrime = (f_HasPrime)MH_Hook(M::HasPrimeFunc, &Hooked_HasPrime); if (!oHasPrime) printf("Failed to hook HasPrime\n");
+	//oHasPrime = (f_HasPrime)MH_Hook(M::HasPrimeFunc, &Hooked_HasPrime); if (!oHasPrime) printf("Failed to hook HasPrime\n");
 	oChangeGameUIState = (f_ChangeGameUIState)MH_Hook(M::ChangeGameUIStateFunc, &Hooked_ChangeGameUIState); if (!oChangeGameUIState) printf("Failed to hook ChangeGameUIState\n");
 	oGetDemoPlaybackParameters = (f_GetDemoPlaybackParameters)MH_HookVtbl(I::Engine, 218, &Hooked_GetDemoPlaybackParameters); if (!oGetDemoPlaybackParameters) printf("Failed to hook GetDemoPlaybackParameters\n");
 	oFrameStageNotify = (f_FrameStageNotify)MH_HookVtbl(I::Client, 37, &Hooked_FrameStageNotify); if (!oFrameStageNotify) printf("Failed to hook FrameStageNotify\n");

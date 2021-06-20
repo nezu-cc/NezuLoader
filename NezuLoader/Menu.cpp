@@ -641,12 +641,12 @@ void Menu::DrawToolsTab(IDirect3DDevice9* pDevice) {
                     ImGui::EndChild();
                 }
                 {//fake
-                    static float w_heigth = 0;
+                    /*static float w_heigth = 0;
                     ImGui::BeginChildWithTitle("Fake", ImVec2(avail_w, w_heigth)); {
-                        ImGui::Checkbox("Fake prime", &Cfg::c.lobby.fake.fake_prime);
+                        //ImGui::Checkbox("Fake prime", &Cfg::c.lobby.fake.fake_prime);
                     }
                     w_heigth = ImGui::GetCursorPos().y;
-                    ImGui::EndChild();
+                    ImGui::EndChild();*/
                 }
                     static float w_heigth = 0;
                     ImGui::BeginChildWithTitle("Debug", ImVec2(avail_w, w_heigth)); {

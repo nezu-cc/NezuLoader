@@ -8,7 +8,7 @@ namespace M {
 	f_CreateSession CreateSession;
 	f_CreateSessionUI CreateSessionUI;
 	f_InitKeyValues InitKeyValues;
-	void* HasPrimeFunc;
+	//void* HasPrimeFunc;
 	void* ChangeGameUIStateFunc;
 	void* demoFileEndReached;
 	const char** MatchmakingUIStatusString;
@@ -36,7 +36,7 @@ namespace M {
 		CreateSession = (f_CreateSession)relativeToAbsolute(FindPattern("client.dll", "E8 ? ? ? ? 83 EC 14 E8") + 1);
 		CreateSessionUI = (f_CreateSessionUI)relativeToAbsolute(FindPattern("client.dll", "E8 ? ? ? ? 8B 50 08") + 1);
 		InitKeyValues = (f_InitKeyValues)relativeToAbsolute(FindPattern("client.dll", "E8 ? ? ? ? 5F 89 06") + 1);
-		HasPrimeFunc = (void*)relativeToAbsolute(FindPattern("client.dll", "E8 ? ? ? ? 88 44 24 13 84 C0") + 1);
+		//HasPrimeFunc = (void*)relativeToAbsolute(FindPattern("client.dll", "E8 ? ? ? ? 88 44 24 13 84 C0") + 1);
 		ChangeGameUIStateFunc = (void*)relativeToAbsolute(FindPattern("client.dll", "E8 ? ? ? ? F3 0F 10 4D ? C6 86") + 1);
 		demoFileEndReached = (void*)FindPattern("client.dll", "8B C8 85 C9 74 1F 80 79 10");
 		MatchmakingUIStatusString = *(const char***)(FindPattern("client.dll", "8B F1 B9 ? ? ? ? 6A 00") + 3);

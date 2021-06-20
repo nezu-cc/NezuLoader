@@ -16,7 +16,7 @@ namespace M {
 	extern f_CreateSession CreateSession;
 	extern f_CreateSessionUI CreateSessionUI;
 	extern f_InitKeyValues InitKeyValues;
-	extern void* HasPrimeFunc;
+	//extern void* HasPrimeFunc;
 	extern void* ChangeGameUIStateFunc;
 	extern void* demoFileEndReached;
 	extern const char** MatchmakingUIStatusString;
