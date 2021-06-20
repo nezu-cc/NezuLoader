@@ -39,7 +39,6 @@ void NezuLoader::Load(HMODULE hModule) {
 
     auto clMoveChokeClamp = FindPattern("engine.dll", "B8 ? ? ? ? 3B F0 0F 4F F0 89 5D FC") + 1;
 
-    auto nMaxRoutableClamp1 = FindPattern("engine.dll", "FF 90 ? ? ? ? 3D ? ? ? ? 7D 07") + 2;
     auto nMaxRoutableClamp2 = FindPattern("engine.dll", "B8 ? ? ? ? EB 05 3B C6") + 1;
 
     auto TooManyQueuedPackets = FindPattern("steamnetworkingsockets.dll", "8D 0C 16") + 3;
