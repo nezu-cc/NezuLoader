@@ -53,6 +53,8 @@
 		cfg_val(cfg_mode)(misc, bool, ow_reveal, false)\
 		cfg_val(cfg_mode)(misc, bool, disable_auto_mute, false)\
 		cfg_val(cfg_mode)(misc, bool, crasher, false)\
+		cfg_val(cfg_mode)(misc, int, crasher_strength, 500)\
+		cfg_val(cfg_mode)(misc, float, crasher_max_time, 20)\
 		cfg_val(cfg_mode)(misc, bool, crasher_fix, false)\
 	cfg_struct_end(cfg_mode)(root, misc)\
 	cfg_struct_start(cfg_mode)(root, visuals)\

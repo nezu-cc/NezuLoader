@@ -720,7 +720,18 @@ void Menu::DrawToolsTab(IDirect3DDevice9* pDevice) {
                 {//exploits
                     static float w_heigth = 0;
                     ImGui::BeginChildWithTitle("Exploits", ImVec2(avail_w, w_heigth)); {
-                        ImGui::Checkbox("Crasher", &Cfg::c.misc.crasher);
+                        static float start_time;
+                        float time = (float)ImGui::GetTime();
+                        if (ImGui::Checkbox("Crasher", &Cfg::c.misc.crasher))
+                            start_time = time;
+                        if (I::Engine->IsInGame() && Cfg::c.misc.crasher) {
+                            ImGui::SameLine();
+                            ImGui::Text("%.1f", time - start_time);
+                            if (time - start_time > Cfg::c.misc.crasher_max_time)
+                                Cfg::c.misc.crasher = false;
+                        }
+                        ImGui::SliderInt("Crasher strength", &Cfg::c.misc.crasher_strength, 1, 1000);
+                        ImGui::SliderFloat("Crasher max time", &Cfg::c.misc.crasher_max_time, 1, 60, "%.1f");
                         if (Cfg::c.misc.crasher)
                             Cfg::c.misc.crasher_fix = true;
                         ImGui::Checkbox("Crasher fix", &Cfg::c.misc.crasher_fix);
