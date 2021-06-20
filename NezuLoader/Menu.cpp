@@ -648,6 +648,8 @@ void Menu::DrawToolsTab(IDirect3DDevice9* pDevice) {
                     w_heigth = ImGui::GetCursorPos().y;
                     ImGui::EndChild();*/
                 }
+
+                if (G::debug) {
                     static float w_heigth = 0;
                     ImGui::BeginChildWithTitle("Debug", ImVec2(avail_w, w_heigth)); {
                         ImGui::Text("Lobby ID: %llu", lobby_id.ConvertToUint64());
@@ -727,6 +729,7 @@ void Menu::DrawToolsTab(IDirect3DDevice9* pDevice) {
                     ImGui::EndChild();
                 }
                 
+                if (G::debug) {
                     static float w_heigth = 0;
                     ImGui::BeginChildWithTitle("Debug", ImVec2(avail_w, w_heigth)); {
                         static std::string js_textbox = "";
