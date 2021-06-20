@@ -15,19 +15,7 @@ void __fastcall H::Hooked_FrameStageNotify(void* thisPtr, void* edx, ClientFrame
 		H::Hook_NET_SendLong(Cfg::c.misc.crasher);
 		if (Cfg::c.misc.crasher) {
 
-			{
-				static auto lagcompVar{ I::CVar->FindVar("net_maxroutable") };
-				*(int*)((DWORD)&lagcompVar->fnChangeCallback + 0xC) = NULL;
-				lagcompVar->SetValue(50);
-			}
-
-			{
-				static auto lagcompVar{ I::CVar->FindVar("sv_maxroutable") };
-				*(int*)((DWORD)&lagcompVar->fnChangeCallback + 0xC) = NULL;
-				lagcompVar->SetValue(50);
-			}
-
-			static ConVar* sv_maxrouteable = I::CVar->FindVar("sv_maxroutable");
+			static ConVar* sv_maxroutable = I::CVar->FindVar("sv_maxroutable");
 			static ConVar* net_maxroutable = I::CVar->FindVar("net_maxroutable");
 			static ConVar* cl_flushentitypacket = I::CVar->FindVar("cl_flushentitypacket");
 			static ConVar* net_compresspackets_minsize = I::CVar->FindVar("net_compresspackets_minsize");
@@ -35,29 +23,30 @@ void __fastcall H::Hooked_FrameStageNotify(void* thisPtr, void* edx, ClientFrame
 			static ConVar* net_threaded_socket_recovery_time = I::CVar->FindVar("net_threaded_socket_recovery_time");
 			static ConVar* net_threaded_socket_recovery_rate = I::CVar->FindVar("net_threaded_socket_recovery_rate");
 			static ConVar* net_threaded_socket_burst_cap = I::CVar->FindVar("net_threaded_socket_burst_cap");
-			static ConVar* net_graph = I::CVar->FindVar("net_graph");
 			static ConVar* rate = I::CVar->FindVar("rate");
-			*(int*)((DWORD)&rate->fnChangeCallback + 0xC) = NULL;
-			rate->SetValue(99999999);
 
+			*(int*)((DWORD)&rate->fnChangeCallback + 0xC) = NULL;
 			*(int*)((DWORD)&net_threaded_socket_burst_cap->fnChangeCallback + 0xC) = NULL;
 			*(int*)((DWORD)&net_threaded_socket_recovery_rate->fnChangeCallback + 0xC) = NULL;
 			*(int*)((DWORD)&net_threaded_socket_recovery_time->fnChangeCallback + 0xC) = NULL;
+			*(int*)((DWORD)&net_compresspackets->fnChangeCallback + 0xC) = NULL;
+			*(int*)((DWORD)&net_compresspackets_minsize->fnChangeCallback + 0xC) = NULL;
+			*(int*)((DWORD)&net_maxroutable->fnChangeCallback + 0xC) = NULL;
+			*(int*)((DWORD)&sv_maxroutable->fnChangeCallback + 0xC) = NULL;
+			*(int*)((DWORD)&cl_flushentitypacket->fnChangeCallback + 0xC) = NULL;
+
+			net_maxroutable->bHasMin = false;
+			net_maxroutable->bHasMax = false;
+
+			rate->SetValue(99999999);
 			net_threaded_socket_recovery_time->SetValue(2);
 			net_threaded_socket_recovery_rate->SetValue(999999);
 			net_threaded_socket_burst_cap->SetValue(999999);
-			*(int*)((DWORD)&net_compresspackets->fnChangeCallback + 0xC) = NULL;
 			net_compresspackets->SetValue(true);
-			*(int*)((DWORD)&net_compresspackets_minsize->fnChangeCallback + 0xC) = NULL;
 			net_compresspackets_minsize->SetValue(0);
-			*(int*)((DWORD)&net_maxroutable->fnChangeCallback + 0xC) = NULL;
-			net_maxroutable->bHasMin = false;
-			net_maxroutable->bHasMax = false;
 			net_maxroutable->SetValue(120);
 			net_maxroutable->SetValue(120.f);
-
-
-			*(int*)((DWORD)&cl_flushentitypacket->fnChangeCallback + 0xC) = NULL;
+			sv_maxroutable->SetValue(50);
 
 		}
 		else {
