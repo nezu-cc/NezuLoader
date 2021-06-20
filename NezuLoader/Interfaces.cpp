@@ -24,6 +24,7 @@ namespace I {
 	IClientState* ClientState;
 	IMaterialSystem* MaterialSystem;
 	ICVar* CVar;
+	CGlobalVarsBase* Globals;
 
 	void CaptureInterfaces() {
 
@@ -38,6 +39,7 @@ namespace I {
 		I::MaterialSystem = (IMaterialSystem*)CaptureInterface("materialsystem.dll", "VMaterialSystem080");
 		I::InputSystem = (IInputSystem*)CaptureInterface("inputsystem.dll", "InputSystemVersion001");
 		I::CVar = (ICVar*)CaptureInterface("vstdlib.dll", "VEngineCvar007");
+		I::Globals = **(CGlobalVarsBase***)((FindPattern("client.dll", "A1 ? ? ? ? 5E 8B 40 10") + 1));
 
 		//steam
 		HSteamUser hSteamUser = ((HSteamUser(__cdecl*)(void))GetProcAddress(GetModuleHandleA("steam_api.dll"), "SteamAPI_GetHSteamUser"))();

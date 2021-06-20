@@ -23,4 +23,5 @@ namespace I {
 	extern IClientState* ClientState;
 	extern IMaterialSystem* MaterialSystem;
 	extern ICVar* CVar;
+	extern CGlobalVarsBase* Globals;
 }
