@@ -58,6 +58,30 @@ DWORD WINAPI LoaderThread(LPVOID lpThreadParameter) {
 		}
 	}
 
+	if (!settings->CSGOConfig.empty()) {
+		const auto CSGOConfig = UTF8TCHAR(settings->CSGOConfig);
+		DWORD dwAttr = GetFileAttributes(CSGOConfig.c_str());
+
+		if (dwAttr == INVALID_FILE_ATTRIBUTES || (dwAttr & FILE_ATTRIBUTE_DIRECTORY) == 0) {
+			L::Error("Specified config directory isn't a valid directory (0x%X)", dwAttr);
+			return FALSE;
+		}
+
+		if (!SetEnvironmentVariable(_T("USRLOCALCSGO"), CSGOConfig.c_str())) {
+			L::Error("Failed to set USRLOCALCSGO (SetEnvironmentVariable) 0x%X", GetLastError());
+			return FALSE;
+		}
+
+		L::Info("USRLOCALCSGO set to \"%s\"", settings->CSGOConfig.c_str());
+
+	}
+	else {
+		if (!SetEnvironmentVariable(_T("USRLOCALCSGO"), NULL)) {
+			L::Error("Failed to unset USRLOCALCSGO (SetEnvironmentVariable) 0x%X", GetLastError());
+			return FALSE;
+		}
+	}
+
 	if (settings->RestartSteam || proc->FindProcess(_T("steam.exe")) == 0) { //if steam isn't running (re)start it
 
 		//make sure steam is dead
@@ -128,6 +152,11 @@ DWORD WINAPI LoaderThread(LPVOID lpThreadParameter) {
 
 		L::Info("Steam started");
 
+	}
+
+	//If CSGOConfig was set and we got to this point the enviroment variable is set properly
+	if (!hSteamProc && !settings->CSGOConfig.empty()) { 
+		L::Warning("Steam already running! USRLOCALCSGO will be ignored");
 	}
 
 	if (settings->VacBypass) {
@@ -465,7 +494,7 @@ DWORD WINAPI LoaderThread(LPVOID lpThreadParameter) {
 
 	if (!inj_res) {
 		CloseHandle(hCsProc);
-		L::Error("Injection failed");
+		L::Error("Injection failed (%s)", Injector::GetLastErrorString().c_str());
 		return FALSE;
 	}
 

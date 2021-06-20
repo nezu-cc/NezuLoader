@@ -26,6 +26,31 @@ std::string U::DllFilePicker(HWND owner) {
 }
 
 /// <summary>
+/// simple picker for directories
+/// </summary>
+/// <param name="owner">owning window. Can be NULL</param>
+/// <returns>the selected path ancoded in utf8 or empty string on error</returns>
+std::string U::DirectoryPicker(HWND owner) {
+    TCHAR dir[MAX_PATH];
+    BROWSEINFO bInfo;
+    bInfo.hwndOwner = owner;
+    bInfo.pidlRoot = NULL;
+    bInfo.pszDisplayName = dir;
+    bInfo.lpszTitle = _T("Select local config directory. Example: C:\\Program Files (x86)\\Steam\\userdata\\<SteamID>\\730\\local");
+    bInfo.ulFlags = 0;
+    bInfo.lpfn = NULL;
+    bInfo.lParam = 0;
+    bInfo.iImage = -1;
+
+    LPITEMIDLIST lpItem = SHBrowseForFolder(&bInfo);
+    if (lpItem != NULL) {
+        SHGetPathFromIDList(lpItem, dir);
+        return TCHARUTF8(dir);
+    }
+    return "";
+}
+
+/// <summary>
 /// External implementation of DisableThreadLibraryCalls that also can be re enabled
 /// </summary>
 /// <param name="hProc">Target process handle</param>

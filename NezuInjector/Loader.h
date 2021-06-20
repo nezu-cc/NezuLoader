@@ -22,6 +22,7 @@ public:
     std::pair<std::string, std::string> Creds;
     std::string CustomSteamArgs;
     bool AlwaysOnTop = false;
+    std::string CSGOConfig;
 } NezuInjectorSettings;
 
 DWORD WINAPI LoaderThread(LPVOID lpThreadParameter);

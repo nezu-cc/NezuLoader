@@ -151,6 +151,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             inipp::get_value(ini.sections["NezuInjector"], "UseCustomCredentials", settings.UseCustomCredentials);
             inipp::get_value(ini.sections["NezuInjector"], "CustomSteamArgs", settings.CustomSteamArgs);
             inipp::get_value(ini.sections["NezuInjector"], "AlwaysOnTop", settings.AlwaysOnTop);
+            inipp::get_value(ini.sections["NezuInjector"], "CSGOConfig", settings.CSGOConfig);
             nii.close();
         }
         else {
@@ -939,8 +940,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         if (!open)
             SendMessage(hwnd, WM_DESTROY, NULL, NULL);
 
+        static float h_extra = ImGui::GetFrameHeightWithSpacing();
+
         if (settings.AdvSettingsOpen && (!window_injection || !window_injection->WasActive) && (!window_about || !window_about->WasActive) && (!window_account || !window_account->WasActive)) {
-            ImGui::SetNextWindowSize(ImVec2((float)w, (float)h), ImGuiCond_Appearing);
+
+
+            ImGui::SetNextWindowSize(ImVec2((float)w, (float)h + h_extra), ImGuiCond_Appearing);
             ImGui::SetNextWindowPos(ImVec2(0, (float)h), ImGuiCond_Once);
 
             if (ImGui::Begin("Advanced Settings", &settings.AdvSettingsOpen,
@@ -990,6 +995,30 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 ImGui::InputText("##steamargs", &settings.CustomSteamArgs);
                 ImGui::PopItemWidth();
                 ImGui::PopStyleVar();
+
+                ImGui::AlignTextToFramePadding();
+                ImGui::Text("CS:GO Config:");
+                ImGui::SameLine();
+                HelpMarker("CS:GO will use this directory to load/save configuration\nWorks only when (re)starting steam", 
+                    status.SteamActive && !settings.RestartSteam ? color_warning : color_disabled);
+                ImGui::SameLine();
+                static float btn_width = 100; //some start value
+                ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 4));
+                ImGui::PushItemWidth(-btn_width);
+                ImGui::InputText("##csgo_cfg", &settings.CSGOConfig, ImGuiInputTextFlags_ReadOnly | ImGuiInputTextFlags_NoMarkEdited);
+                ImGui::PopItemWidth();
+                ImGui::SameLine();
+                if (settings.CSGOConfig.empty()) {
+                    if (ImGui::Button("Select"))
+                        settings.CSGOConfig = U::DirectoryPicker(hwnd);
+                }
+                else {
+                    if (ImGui::Button("Clear"))
+                        settings.CSGOConfig.clear();
+                }
+                btn_width = ImGui::GetItemRectSize().x + 1;
+                ImGui::PopStyleVar();
+
             }
             ImGui::End();
         }
@@ -997,7 +1026,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         bool download_in_progress = sym_ntdll_native_ret.wait_for(std::chrono::milliseconds(0)) != std::future_status::ready;
         if (download_in_progress || (!sym_ntdll_native_ret.get() && !sym_ntdll_native.m_szError.empty())) {
             ImGui::SetNextWindowSize(ImVec2((float)w, (float)h), ImGuiCond_Appearing);
-            ImGui::SetNextWindowPos(ImVec2(0, (float)(settings.AdvSettingsOpen ? 2 * h : h)), ImGuiCond_Always);
+            ImGui::SetNextWindowPos(ImVec2(0, (float)(settings.AdvSettingsOpen ? (2 * h) + h_extra : h)), ImGuiCond_Always);
 
             if (ImGui::Begin("Symbol download", NULL,
 #ifdef SHOW_DEMO
@@ -1218,6 +1247,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
                 inipp::set_value(ini.sections["NezuInjector"], "UseCustomCredentials", settings.UseCustomCredentials);
                 inipp::set_value(ini.sections["NezuInjector"], "CustomSteamArgs", settings.CustomSteamArgs);
                 inipp::set_value(ini.sections["NezuInjector"], "AlwaysOnTop", settings.AlwaysOnTop);
+                inipp::set_value(ini.sections["NezuInjector"], "CSGOConfig", settings.CSGOConfig);
                 ini.generate(nii);
                 nii.close();
             }
