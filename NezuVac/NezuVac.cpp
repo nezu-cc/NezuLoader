@@ -79,6 +79,10 @@ DWORD WINAPI NezuVac::MainThread(HMODULE hModule) {
     return 0;
 }
 
+NezuVac::NeuzStatus* NezuVac::GetVacStatus() {
+	return &vac_status;
+}
+
 bool __stdcall NezuVac::Hooked_loading(vac_buffer* h_mod, char injection_flags) {
 
 	DWORD header_crc = [](LPVOID mod) -> DWORD {

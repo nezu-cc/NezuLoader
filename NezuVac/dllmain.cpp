@@ -7,7 +7,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     case DLL_PROCESS_ATTACH:
     {
         DisableThreadLibraryCalls(hModule);
-        NezuVac::vac_status.loaded = TRUE;
+        vac_status.loaded = TRUE;
         HANDLE hThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)NezuVac::MainThread, hModule, 0, NULL);
         if(hThread)
             CloseHandle(hThread);

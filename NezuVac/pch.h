@@ -15,4 +15,7 @@
 
 #include "Crc32.h"
 
+#include "NezuVacStatus.h"
+extern NezuVac::NeuzStatus vac_status;
+
 #endif //PCH_H

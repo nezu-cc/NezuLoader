@@ -3,9 +3,9 @@
 
 namespace NezuVac {
 
-	extern NeuzStatus vac_status;
-
 	DWORD __stdcall MainThread(HMODULE hModule);
+
+	NeuzStatus* GetVacStatus();
 
 	enum vac_result_t {
 		VAC_SUCCESS = 1,
