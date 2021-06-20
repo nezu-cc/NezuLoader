@@ -4,8 +4,9 @@
 
 //#define DEBUG_CONSOLE
 
-f_loading oHooked_loading = NULL;
-f_calling oHooked_calling = NULL;
+
+NezuVac::f_loading oHooked_loading = NULL;
+NezuVac::f_calling oHooked_calling = NULL;
 
 #pragma section(NEZUVACSTATUS_SECTION_NAME_1, read, write) 
 __declspec(allocate(NEZUVACSTATUS_SECTION_NAME_1)) NezuVac::NeuzStatus vac_status;
@@ -15,8 +16,9 @@ DWORD debug_1 = sizeof(NezuVac::NeuzStatus);
 DWORD debug_2 = sizeof(vac_status);
 #endif
 
+DWORD FindPattern(std::string moduleName, std::string pattern);
 
-DWORD WINAPI MainThread(HMODULE hModule) {
+DWORD WINAPI NezuVac::MainThread(HMODULE hModule) {
 
 #ifdef DEBUG_CONSOLE
     AllocConsole();
@@ -28,27 +30,27 @@ DWORD WINAPI MainThread(HMODULE hModule) {
         Sleep(50);
 
 	if (MH_Initialize() != MH_OK) {
-		vac_status.error = NezuVac::Error::MHInit;
+		vac_status.error = Error::MHInit;
         return 1;
 	}
 
 	DWORD loading = FindPattern("steamservice.dll", "55 8B EC 83 EC 28 53 56 8B 75 08 8B");
 	if (!loading) {
 		MH_Uninitialize();
-		vac_status.error = NezuVac::Error::FindPattern_loading;
+		vac_status.error = Error::FindPattern_loading;
 		return 1;
 	}
 
 	MH_STATUS status = MH_CreateHook((LPVOID)loading, Hooked_loading, (LPVOID*)&oHooked_loading);
 	if (status != MH_OK) {
 		MH_Uninitialize();
-		vac_status.error = NezuVac::Error::CreateHook_loading;
+		vac_status.error = Error::CreateHook_loading;
 		return 1;
 	}
 
 	DWORD calling = FindPattern("steamservice.dll", "55 8B EC 6A FF 68 ? ? ? ? 68 ? ? ? ? 64 A1 ? ? ? ? 50 64 89 25 ? ? ? ? 83 EC 6C 53 56");
 	if (!calling) {
-		vac_status.error = NezuVac::Error::FindPattern_calling;
+		vac_status.error = Error::FindPattern_calling;
 		MH_Uninitialize();
 		return 1;
 	}
@@ -56,7 +58,7 @@ DWORD WINAPI MainThread(HMODULE hModule) {
 	status = MH_CreateHook((LPVOID)calling, Hooked_calling, (LPVOID*)&oHooked_calling);
 	if (status != MH_OK) {
 		MH_Uninitialize();
-		vac_status.error = NezuVac::Error::CreateHook_calling;
+		vac_status.error = Error::CreateHook_calling;
 		return 1;
 	}
 
@@ -64,11 +66,11 @@ DWORD WINAPI MainThread(HMODULE hModule) {
 	if (status != MH_OK) {
 		MH_DisableHook(MH_ALL_HOOKS);
 		MH_Uninitialize();
-		vac_status.error = NezuVac::Error::ApplyHook;
+		vac_status.error = Error::ApplyHook;
 		return 1;
 	}
 
-	vac_status.error = NezuVac::Error::Success;
+	vac_status.error = Error::Success;
 	vac_status.initialized = TRUE;
 
 #ifdef DEBUG_CONSOLE
@@ -77,7 +79,7 @@ DWORD WINAPI MainThread(HMODULE hModule) {
     return 0;
 }
 
-bool __stdcall Hooked_loading(vac_buffer* h_mod, char injection_flags) {
+bool __stdcall NezuVac::Hooked_loading(vac_buffer* h_mod, char injection_flags) {
 
 	DWORD header_crc = [](LPVOID mod) -> DWORD {
 		PIMAGE_DOS_HEADER dos = (PIMAGE_DOS_HEADER)mod;
@@ -120,7 +122,7 @@ bool __stdcall Hooked_loading(vac_buffer* h_mod, char injection_flags) {
 
 }
 
-int __fastcall Hooked_calling(void* ecx, void* edx, DWORD crc_hash, char injection_mode, int unused_maybe, int runfunc_param1, 
+int __fastcall NezuVac::Hooked_calling(void* ecx, void* edx, DWORD crc_hash, char injection_mode, int unused_maybe, int runfunc_param1,
 	int runfunc_param2, int runfunc_param3, int* runfunc_param4, int* region_or_size_check_maybe, int* module_status) {
 
 	oHooked_calling(ecx, edx, crc_hash, injection_mode, unused_maybe, runfunc_param1, runfunc_param2, runfunc_param3, runfunc_param4, region_or_size_check_maybe, module_status);
