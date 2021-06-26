@@ -2976,3 +2976,17 @@ private:
 	//  all of the entities from forcing a new PackedEntity on the same tick (i.e., prevents them from getting lockstepped on this)
 	int       nTimestampRandomizeWindow;
 };
+
+class CEconGameAccountClient {
+public:
+	void** vftable; //0
+	void** CSOEconGameAccountClient_vftable; //4
+	DWORD unk_1; //8
+	uint32 additional_backpack_slots; //12
+	uint32 bonus_xp_timestamp_refresh; //16
+	uint32 bonus_xp_usedflags; //20
+	uint32 elevated_state; //24
+	uint32 elevated_timestamp; //28
+	DWORD unk_2; //32
+	DWORD unk_3; //36
+};

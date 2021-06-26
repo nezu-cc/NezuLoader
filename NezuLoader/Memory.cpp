@@ -29,6 +29,8 @@ namespace M {
 	int HOST_VERSION;
 	void* Calls_SendToImpl;
 	void* CNetChan_SendSubChannelData;
+	void* GetEconGameAccountClient;
+	void* IsPrime;
 
 	void FindAll() {
 
@@ -57,6 +59,8 @@ namespace M {
 		HOST_VERSION = *(int*)(FindPattern("engine.dll", "A1 ? ? ? ? 50 FF 77 08") + 1);
 		Calls_SendToImpl = (void*)relativeToAbsolute(FindPattern("engine.dll", "E8 ? ? ? ? 83 C4 08 FF 45 F8") + 1);
 		CNetChan_SendSubChannelData = (void*)relativeToAbsolute(FindPattern("engine.dll", "E8 ? ? ? ? 84 C0 74 05 80 4C 24") + 1);
+		GetEconGameAccountClient = (void*)relativeToAbsolute(FindPattern("client.dll", "E8 ? ? ? ? 85 C0 74 EE") + 1);
+		IsPrime = (void*)relativeToAbsolute(FindPattern("client.dll", "E8 ? ? ? ? 88 46 14") + 1);
 
 	}
 

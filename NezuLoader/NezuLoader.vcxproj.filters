@@ -440,7 +440,7 @@
     <ClCompile Include="Steam.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
-    <ClCompile Include="HasPrime.cpp">
+    <ClCompile Include="Prime.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
     <ClCompile Include="protobuf\pb_common.cpp">

@@ -25,6 +25,9 @@ void H::ApplyHooks() {
 	oProcessConnectionless = (f_ProcessConnectionless)MH_Hook(M::ProcessConnectionless, &Hooked_ProcessConnectionless); if (!oProcessConnectionless) printf("Failed to hook ProcessConnectionless\n");
 	oCNET_SendSubChannelData = (f_CNET_SendSubChannelData)MH_Hook(M::CNetChan_SendSubChannelData, &Hooked_CNET_SendSubChannelData); 
 	if (!oCNET_SendSubChannelData) printf("Failed to hook CNET_SendSubChannelData\n");
+	oGetEconGameAccountClient = (f_GetEconGameAccountClient)MH_Hook(M::GetEconGameAccountClient, &Hooked_GetEconGameAccountClient);
+	if (!oGetEconGameAccountClient) printf("Failed to hook GetEconGameAccountClient\n");
+	oIsPrime = (f_IsPrime)MH_Hook(M::IsPrime, &Hooked_IsPrime); if (!oIsPrime) printf("Failed to hook IsPrime\n");
 
 	//steam
 	oRetrieveMessage = (f_RetrieveMessage)MH_HookVtbl(I::SteamGameCoordinator, 2, &Hooked_RetrieveMessage); if (!oRetrieveMessage) printf("Failed to hook RetrieveMessage\n");

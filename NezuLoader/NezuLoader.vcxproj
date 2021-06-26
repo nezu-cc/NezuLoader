@@ -226,7 +226,7 @@
     <ClCompile Include="GameCoordinator.cpp" />
     <ClCompile Include="GameEventListener.cpp" />
     <ClCompile Include="Globals.cpp" />
-    <ClCompile Include="HasPrime.cpp" />
+    <ClCompile Include="Prime.cpp" />
     <ClCompile Include="Hooks.cpp" />
     <ClCompile Include="imgui_custom.cpp" />
     <ClCompile Include="Interfaces.cpp" />

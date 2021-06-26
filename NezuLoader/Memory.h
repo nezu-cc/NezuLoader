@@ -37,6 +37,8 @@ namespace M {
 	extern int HOST_VERSION;
 	extern void* Calls_SendToImpl;
 	extern void* CNetChan_SendSubChannelData;
+	extern void* GetEconGameAccountClient;
+	extern void* IsPrime;
 
 	void FindAll();
 };
