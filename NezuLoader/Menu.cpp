@@ -247,7 +247,7 @@ void Menu::Draw(IDirect3DDevice9* pDevice) {
             ImGui::InputText("##selectedconfigname", &configname);
             list_size += ImGui::GetItemRectSize().y + style.ItemSpacing.y;
 
-            G::debug = configname == "enable debug";
+            G::debug |= configname == "enable debug";
 
             static float buttonH = 20;
             if (ImGui::Button("Load", ImVec2(ImGui::GetContentRegionAvailWidth() - (textures.reload != NULL ? buttonH + style.ItemSpacing.x : 0), 0))) {
