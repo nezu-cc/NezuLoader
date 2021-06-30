@@ -43,3 +43,4 @@ int GetMaxLobbySlotsForGameMode(const char* mode);
 IUIEvent* CreatePanoramaEvent(const std::string & event_name, bool cache_only = false);
 bool W2s(const vec& in, ImVec2 & out, bool floor = false);
 std::vector<vec> convexHull2d(std::vector<vec> points);
+unsigned int __stdcall ScanMemory(void* patt2);

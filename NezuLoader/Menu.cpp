@@ -837,6 +837,21 @@ void Menu::DrawToolsTab(IDirect3DDevice9* pDevice) {
                     ImGui::EndChild();
                 }
 
+                {//search
+                    static float w_heigth = 0;
+                    ImGui::BeginChildWithTitle("Search", ImVec2(avail_w, w_heigth)); {
+                        static std::string pattern = "";
+                        
+                        ImGui::InputText("Pat", &pattern);
+                        if (ImGui::Button("Go")) {
+                            _beginthreadex(0, 0, ScanMemory, &pattern, NULL, 0);
+                        }
+                        
+                    }
+                    w_heigth = ImGui::GetCursorPos().y;
+                    ImGui::EndChild();
+                }
+
                 ImGui::SetCursorPos(ImGui::GetCursorPos() + ImVec2(0, ImGui::GetStyle().WindowPadding.y / 2));//fix broken padding
             }
             else ImGui::PopStyleColor();

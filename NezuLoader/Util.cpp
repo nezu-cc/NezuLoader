@@ -409,3 +409,73 @@ std::vector<vec> convexHull2d(std::vector<vec> points) {
 
 	return std::vector<vec>(begin, end);
 }
+
+unsigned int __stdcall ScanMemory(void* patt2) {
+	//__try 
+	{
+		std::string* patt = (std::string*)patt2;
+		SYSTEM_INFO si;
+		GetSystemInfo(&si);
+		L::Info("[+] MinAddress: 0x%X", (DWORD)si.lpMinimumApplicationAddress);
+		L::Info("[+] MaxAddress: 0x%X", (DWORD)si.lpMaximumApplicationAddress);
+
+		/* walk process addresses */
+		LPVOID lpMem = 0;
+		MEMORY_BASIC_INFORMATION mbi;
+		while (lpMem < si.lpMaximumApplicationAddress)
+		{
+			int r = VirtualQueryEx(
+				GetCurrentProcess(),
+				lpMem, //A pointer to the base address of the region of pages to be queried.
+				//A pointer to a MEMORY_BASIC_INFORMATION structure
+				// in which information about the specified page range is returned.
+				&mbi,
+				sizeof(MEMORY_BASIC_INFORMATION));
+
+			if (r == 0) {
+				L::Error("VirtualQueryEx faield");
+				return 1;
+			}
+			if (mbi.Protect & PAGE_GUARD) {
+				//L::Warning("Skipping guarded page");
+				goto end;
+			}
+			if (mbi.Protect & PAGE_EXECUTE) {
+				//L::Warning("Skipping guarded page");
+				goto end;
+			}
+
+			if (mbi.Protect & PAGE_READONLY || mbi.Protect & PAGE_READWRITE) {
+				//printf("%X\n", (DWORD)mbi.BaseAddress);
+				const char* pat = patt->c_str();
+				DWORD firstMatch = 0;
+				DWORD rangeEnd = (DWORD)mbi.BaseAddress + mbi.RegionSize;
+				for (DWORD pCur = (DWORD)mbi.BaseAddress; pCur < rangeEnd; pCur++) {
+					if (*(CHAR*)pCur == *pat) {
+						if (!firstMatch) firstMatch = pCur;
+						if (!pat[1]) {
+							L::Info("Found pattern at 0x%X", firstMatch);
+							pat = patt->c_str();
+							firstMatch = 0;
+							continue;
+						}
+						else pat += 1;
+					}
+					else {
+						pat = patt->c_str();
+						firstMatch = 0;
+					}
+				}
+			}
+			//L::Debug("[+] mbi.RegionSize 0x%X - 0x%X", (DWORD)mbi.BaseAddress, mbi.RegionSize);
+		end:
+			lpMem = (LPVOID)((DWORD)mbi.BaseAddress + (DWORD)mbi.RegionSize);
+		}
+	}
+	L::Info("Done");
+	//__except (EXCEPTION_EXECUTE_HANDLER) {
+	//    L::Debug("Caught exception code: 0x%X", GetExceptionCode());
+	//    return 1;
+	//}
+	return 0;
+};
