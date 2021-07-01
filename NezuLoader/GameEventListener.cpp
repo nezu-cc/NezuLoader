@@ -3,6 +3,7 @@
 
 void GameEventListener::init() {
 	I::GameEventManager->AddListener(this, "cs_win_panel_match");
+    I::GameEventManager->AddListener(this, "round_freeze_end");
 }
 
 void GameEventListener::remove() {
@@ -19,6 +20,11 @@ void GameEventListener::FireGameEvent(IGameEvent* event) {
             if (Cfg::c.lobby.auto_invite.enabled)
                 G::AutoInviteOnUiChange = true;
         }
+        break;
+    case fnv::hash("round_freeze_end"):
+        L::Debug("round_freeze_end");
+        if (Cfg::c.misc.crasher_auto)
+            G::crashPrimed = true;
         break;
     }
 }

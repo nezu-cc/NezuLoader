@@ -16,6 +16,8 @@ namespace G {
 	extern ULONGLONG NextAutoQueueCall;
 	extern Matrix4x4 viewMatrix;
 	extern Entity* LocalPlayer;
+	extern float crasherStartTime;
+	extern bool crashPrimed;
 
 };
 

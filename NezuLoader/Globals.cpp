@@ -17,4 +17,6 @@ namespace G {
 	ULONGLONG NextAutoQueueCall = GetTickCount64() + 1000;
 	Matrix4x4 viewMatrix;
 	Entity* LocalPlayer = NULL;
+	float crasherStartTime = 0;
+	bool crashPrimed = false;
 }

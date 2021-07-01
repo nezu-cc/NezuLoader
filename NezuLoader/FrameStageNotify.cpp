@@ -13,6 +13,33 @@ void __fastcall H::Hooked_FrameStageNotify(void* thisPtr, void* edx, ClientFrame
 	if (curStage == FRAME_RENDER_START) {
 
 		H::Hook_NET_SendLong(Cfg::c.misc.crasher);
+		if (Cfg::c.misc.crasher_auto && G::crashPrimed) {
+			bool has_bot = false;
+			for (int i = 0; i < I::Engine->GetMaxClients(); i++) {
+				player_info_t info;
+				if (!I::Engine->GetPlayerInfo(i, &info) || info.ishltv)
+					continue;
+				if (info.fakeplayer) {
+					has_bot = true;
+					break;
+				}
+			}
+			if (!has_bot) {
+				G::crashPrimed = false;
+				Cfg::c.misc.crasher = true;
+				G::crasherStartTime = I::Globals->realtime;
+			}
+		}
+		else
+			G::crashPrimed = false;
+		if (I::Engine->IsInGame()) {
+			if (Cfg::c.misc.crasher && I::Globals->realtime - G::crasherStartTime > Cfg::c.misc.crasher_max_time)
+				Cfg::c.misc.crasher = false;
+		}
+		else {
+			G::crashPrimed = false;
+			Cfg::c.misc.crasher = false;
+		}
 		if (Cfg::c.misc.crasher) {
 
 			static ConVar* sv_maxroutable = I::CVar->FindVar("sv_maxroutable");
