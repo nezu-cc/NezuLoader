@@ -20,6 +20,7 @@ typedef bool(__thiscall* f_ProcessConnectionless)(void* thisPtr, netpacket_t* pa
 typedef bool(__thiscall* f_CNET_SendSubChannelData)(void* thisPtr, void* buf);
 typedef CEconGameAccountClient*(__fastcall* f_GetEconGameAccountClient)(void* thisPtr);
 typedef bool(*f_IsPrime)();
+typedef bool(__thiscall* f_SvCheatsGetBool)(void*);
 
 //steam
 typedef EGCResults(__thiscall* f_RetrieveMessage)(ISteamGameCoordinator* thisPtr, uint32_t* punMsgType, void* pubDest, uint32_t cubDest, uint32_t* pcubMsgSize);
@@ -48,6 +49,7 @@ namespace H {
 	extern f_CNET_SendSubChannelData oCNET_SendSubChannelData;
 	extern f_GetEconGameAccountClient oGetEconGameAccountClient;
 	extern f_IsPrime oIsPrime;
+	extern f_SvCheatsGetBool oSvCheatsGetBool;
 
 	void ApplyHooks();
 	void Hook_NET_SendLong(bool on);
@@ -73,6 +75,7 @@ namespace H {
 	bool __fastcall Hooked_CNET_SendSubChannelData(void* ecx, void* edx, void* thisPtr);
 	CEconGameAccountClient* __fastcall Hooked_GetEconGameAccountClient(void* thisPtr, void* edx);
 	bool Hooked_IsPrime();
+	bool __fastcall Hooked_SvCheatsGetBool(void* thisPtr, void* edx);
 
 };
 

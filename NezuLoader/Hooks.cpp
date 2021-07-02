@@ -28,6 +28,8 @@ void H::ApplyHooks() {
 	oGetEconGameAccountClient = (f_GetEconGameAccountClient)MH_Hook(M::GetEconGameAccountClient, &Hooked_GetEconGameAccountClient);
 	if (!oGetEconGameAccountClient) printf("Failed to hook GetEconGameAccountClient\n");
 	oIsPrime = (f_IsPrime)MH_Hook(M::IsPrime, &Hooked_IsPrime); if (!oIsPrime) printf("Failed to hook IsPrime\n");
+	oSvCheatsGetBool = (f_SvCheatsGetBool)MH_Hook((void*)(*(DWORD**)I::CVar->FindVar("sv_cheats"))[13], &Hooked_SvCheatsGetBool);
+	if (!oSvCheatsGetBool) printf("Failed to hook SvCheatsGetBool\n");
 
 	//steam
 	oRetrieveMessage = (f_RetrieveMessage)MH_HookVtbl(I::SteamGameCoordinator, 2, &Hooked_RetrieveMessage); if (!oRetrieveMessage) printf("Failed to hook RetrieveMessage\n");

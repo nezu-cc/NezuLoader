@@ -52,16 +52,16 @@ void __fastcall H::Hooked_FrameStageNotify(void* thisPtr, void* edx, ClientFrame
 			static ConVar* net_threaded_socket_burst_cap = I::CVar->FindVar("net_threaded_socket_burst_cap");
 			static ConVar* rate = I::CVar->FindVar("rate");
 
-			*(int*)((DWORD)&rate->fnChangeCallback + 0xC) = NULL;
-			*(int*)((DWORD)&net_threaded_socket_burst_cap->fnChangeCallback + 0xC) = NULL;
-			*(int*)((DWORD)&net_threaded_socket_recovery_rate->fnChangeCallback + 0xC) = NULL;
-			*(int*)((DWORD)&net_threaded_socket_recovery_time->fnChangeCallback + 0xC) = NULL;
-			*(int*)((DWORD)&net_compresspackets->fnChangeCallback + 0xC) = NULL;
-			*(int*)((DWORD)&net_compresspackets_minsize->fnChangeCallback + 0xC) = NULL;
-			*(int*)((DWORD)&net_maxroutable->fnChangeCallback + 0xC) = NULL;
-			*(int*)((DWORD)&sv_maxroutable->fnChangeCallback + 0xC) = NULL;
-			*(int*)((DWORD)&cl_flushentitypacket->fnChangeCallback + 0xC) = NULL;
-
+			rate->fnChangeCallback.size = 0;
+			net_threaded_socket_burst_cap->fnChangeCallback.size = 0;
+			net_threaded_socket_recovery_rate->fnChangeCallback.size = 0;
+			net_threaded_socket_recovery_time->fnChangeCallback.size = 0;
+			net_compresspackets->fnChangeCallback.size = 0;
+			net_compresspackets_minsize->fnChangeCallback.size = 0;
+			net_maxroutable->fnChangeCallback.size = 0;
+			sv_maxroutable->fnChangeCallback.size = 0;
+			cl_flushentitypacket->fnChangeCallback.size = 0;
+			
 			net_maxroutable->bHasMin = false;
 			net_maxroutable->bHasMax = false;
 
@@ -78,7 +78,7 @@ void __fastcall H::Hooked_FrameStageNotify(void* thisPtr, void* edx, ClientFrame
 		}
 		else {
 			static ConVar* net_maxroutable = I::CVar->FindVar("net_maxroutable");
-			*(int*)((DWORD)&net_maxroutable->fnChangeCallback + 0xC) = NULL;
+			net_maxroutable->fnChangeCallback.size = 0;
 			net_maxroutable->bHasMin = false;
 			net_maxroutable->bHasMax = false;
 			net_maxroutable->SetValue(1200);

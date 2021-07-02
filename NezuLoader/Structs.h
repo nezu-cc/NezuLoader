@@ -2722,6 +2722,19 @@ struct Matrix4x4 {
 	};
 };
 
+template <typename T>
+class UtlVector {
+public:
+	constexpr T& operator[](int i) noexcept { return memory[i]; };
+	constexpr const T& operator[](int i) const noexcept { return memory[i]; };
+
+	T* memory;//0
+	int allocationCount;//4
+	int growSize;//8
+	int size;//c
+	T* elements;
+};
+
 class ConVar
 {
 public:
@@ -2788,7 +2801,7 @@ public:
 	float fMinVal; //0x0038 
 	__int32 bHasMax; //0x003C 
 	float fMaxVal; //0x0040 
-	void* fnChangeCallback; //0x0044 
+	UtlVector<void(__cdecl*)()> fnChangeCallback; //0x0044 
 };//Size=0x0048
 
 class ICVar : public IAppSystem3

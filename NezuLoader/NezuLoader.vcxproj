@@ -257,6 +257,7 @@
     <ClCompile Include="SDK\bitbuf.cpp" />
     <ClCompile Include="SDK\clzss.cpp" />
     <ClCompile Include="Steam.cpp" />
+    <ClCompile Include="Sv_cheats.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="Visuals.cpp" />
     <ClCompile Include="WndProc.cpp" />

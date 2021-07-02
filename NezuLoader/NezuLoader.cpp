@@ -33,6 +33,9 @@ void NezuLoader::Load(HMODULE hModule) {
             L::Debug("no default config set");
     }
 
+    I::CVar->FindVar("fps_max")->fnChangeCallback.size = 0;
+    I::CVar->FindVar("fps_max_menu")->fnChangeCallback.size = 0;
+
     //this is just pasted as i don't expect this exploit to last long
     //so it will be stripped soon anyway
     //https://github.com/Harpoon-Inc/Harpoon/blob/a59dd07a36c7b0500aa77276d0ab4ee05069163a/Harpoon/Hooks.cpp#L1576

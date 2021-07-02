@@ -39,6 +39,7 @@ namespace M {
 	extern void* CNetChan_SendSubChannelData;
 	extern void* GetEconGameAccountClient;
 	extern void* IsPrime;
+	extern void* fps_max_cheats;
 
 	void FindAll();
 };
