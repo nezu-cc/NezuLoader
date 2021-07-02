@@ -57,6 +57,7 @@
 		cfg_val(cfg_mode)(misc, float, crasher_max_time, 20)\
 		cfg_val(cfg_mode)(misc, bool, crasher_fix, false)\
 		cfg_val(cfg_mode)(misc, bool, crasher_auto, false)\
+		cfg_val(cfg_mode)(misc, bool, sv_pure_bypass, false)\
 	cfg_struct_end(cfg_mode)(root, misc)\
 	cfg_struct_start(cfg_mode)(root, visuals)\
 		cfg_val(cfg_mode)(visuals, bool, remove_grass, false)\

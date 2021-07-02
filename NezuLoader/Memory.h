@@ -40,6 +40,7 @@ namespace M {
 	extern void* GetEconGameAccountClient;
 	extern void* IsPrime;
 	extern void* fps_max_cheats;
+	extern void* CNetChan_SendNetMessage;
 
 	void FindAll();
 };

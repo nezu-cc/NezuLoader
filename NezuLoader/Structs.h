@@ -8,6 +8,21 @@ T GetVFunc(void* vTable, int iIndex) {
 	return (*(T**)vTable)[iIndex];
 }
 
+namespace VirtualMethod
+{
+	template <typename T, std::size_t Idx, typename ...Args>
+	constexpr auto call(void* classBase, Args... args) noexcept
+	{
+		return ((*reinterpret_cast<T(__thiscall***)(void*, Args...)>(classBase))[Idx])(classBase, args...);
+	}
+}
+
+#define VIRTUAL_METHOD(returnType, name, idx, args, argsRaw) \
+constexpr auto name args noexcept \
+{ \
+    return VirtualMethod::call<returnType, idx>argsRaw; \
+}
+
 struct angle;
 
 struct vec {
@@ -3002,4 +3017,35 @@ public:
 	uint32 elevated_timestamp; //28
 	DWORD unk_2; //32
 	DWORD unk_3; //36
+};
+
+enum class CLC_Message {
+	clc_ClientInfo = 8,
+	clc_Move = 9,
+	clc_VoiceData = 10,
+	clc_BaselineAck = 11,
+	clc_ListenEvents = 12,
+	clc_RespondCvarValue = 13,
+	clc_FileCRCCheck = 14,
+	clc_LoadingProgress = 15,
+	clc_SplitPlayerConnect = 16,
+	clc_ClientMessage = 17,
+	clc_CmdKeyValues = 18,
+	clc_HltvReplay = 20
+};
+
+class NetworkMessage
+{
+public:
+	VIRTUAL_METHOD(void, SetNetChannel, 1, (void* netchann), (this, netchann))
+	VIRTUAL_METHOD(void, SetReliable, 2, (bool state), (this, state))
+	VIRTUAL_METHOD(bool, Process, 3, (), (this))
+	VIRTUAL_METHOD(bool, ReadFromBuffer, 4, (bf_read* buffer), (this, buffer))
+	VIRTUAL_METHOD(bool, WriteToBuffer, 5, (bf_write* buffer), (this, buffer))
+	VIRTUAL_METHOD(bool, IsReliable, 6, (), (this))
+	VIRTUAL_METHOD(CLC_Message, getType, 7, (), (this))
+	VIRTUAL_METHOD(int, getGroup, 8, (), (this))
+	VIRTUAL_METHOD(const char*, getName, 9, (), (this))
+	VIRTUAL_METHOD(void*, getNetworkChannel, 10, (), (this))
+	VIRTUAL_METHOD(const char*, toString, 11, (), (this))
 };

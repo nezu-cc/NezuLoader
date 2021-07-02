@@ -736,6 +736,15 @@ void Menu::DrawToolsTab(IDirect3DDevice9* pDevice) {
                     w_heigth = ImGui::GetCursorPos().y;
                     ImGui::EndChild();
                 }
+
+                {//bypass
+                    static float w_heigth = 0;
+                    ImGui::BeginChildWithTitle("Bypass", ImVec2(avail_w, w_heigth)); {
+                        ImGui::Checkbox("sv_pure bypass", &Cfg::c.misc.sv_pure_bypass);
+                    }
+                    w_heigth = ImGui::GetCursorPos().y;
+                    ImGui::EndChild();
+                }
                 
                 if (G::debug) {
                     static float w_heigth = 0;

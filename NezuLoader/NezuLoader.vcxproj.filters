@@ -497,6 +497,9 @@
     <ClCompile Include="Sv_cheats.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
+    <ClCompile Include="SendNetMessage.cpp">
+      <Filter>Source Files\Hooks</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="protobuf\messages.proto">

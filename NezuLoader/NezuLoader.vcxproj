@@ -256,6 +256,7 @@
     <ClCompile Include="protobuf\pb_encode.cpp" />
     <ClCompile Include="SDK\bitbuf.cpp" />
     <ClCompile Include="SDK\clzss.cpp" />
+    <ClCompile Include="SendNetMessage.cpp" />
     <ClCompile Include="Steam.cpp" />
     <ClCompile Include="Sv_cheats.cpp" />
     <ClCompile Include="Util.cpp" />

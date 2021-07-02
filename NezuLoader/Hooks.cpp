@@ -30,6 +30,7 @@ void H::ApplyHooks() {
 	oIsPrime = (f_IsPrime)MH_Hook(M::IsPrime, &Hooked_IsPrime); if (!oIsPrime) printf("Failed to hook IsPrime\n");
 	oSvCheatsGetBool = (f_SvCheatsGetBool)MH_Hook((void*)(*(DWORD**)I::CVar->FindVar("sv_cheats"))[13], &Hooked_SvCheatsGetBool);
 	if (!oSvCheatsGetBool) printf("Failed to hook SvCheatsGetBool\n");
+	oSendNetMessage = (f_SendNetMessage)MH_Hook(M::CNetChan_SendNetMessage, &Hooked_SendNetMessage); if (!oSendNetMessage) printf("Failed to hook SendNetMessage\n");
 
 	//steam
 	oRetrieveMessage = (f_RetrieveMessage)MH_HookVtbl(I::SteamGameCoordinator, 2, &Hooked_RetrieveMessage); if (!oRetrieveMessage) printf("Failed to hook RetrieveMessage\n");

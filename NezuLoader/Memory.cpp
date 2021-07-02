@@ -32,6 +32,7 @@ namespace M {
 	void* GetEconGameAccountClient;
 	void* IsPrime;
 	void* fps_max_cheats;
+	void* CNetChan_SendNetMessage;
 
 	void FindAll() {
 
@@ -63,6 +64,7 @@ namespace M {
 		GetEconGameAccountClient = (void*)relativeToAbsolute(FindPattern("client.dll", "E8 ? ? ? ? 85 C0 74 EE") + 1);
 		IsPrime = (void*)relativeToAbsolute(FindPattern("client.dll", "E8 ? ? ? ? 88 46 14") + 1);
 		fps_max_cheats = (void*)FindPattern("engine.dll", "85 C0 0F 85 ? ? ? ? 8B 0D ? ? ? ? 81 F9 ? ? ? ? 75 1A F3 0F 10 05 ? ? ? ? F3 0F 11 45 ? 8B 45 F8 35");
+		CNetChan_SendNetMessage = (void*)FindPattern("engine.dll", "55 8B EC 83 EC 08 56 8B F1 8B 86 ? ? ? ? 85 C0");
 
 	}
 
