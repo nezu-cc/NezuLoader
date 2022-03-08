@@ -606,7 +606,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             ImGui::SameLine(); HelpMarker("NezuLoader - Injects NezuLoader into CS:GO (If you select a DLL it will be loaded using NezuLoader afterwards)\n"
                 "Standard - Clasic LoadLibrary injector (with trusted mode bypass)\n"
                 "Manual map - Use only if you know what you're doing!\n"
-                "NezuVac - Only injects VAC bypass into Steam", color_disabled);
+                "NezuVac - Only injects VAC bypass into Steam\n"
+                "CS:GO - Just start csgo, don't inject anyting", color_disabled);
             ImGui::SameLine();
             if (status.CsgoActive) {
                 if (settings.RestartSteam)
@@ -618,14 +619,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 HelpMarker("CS:GO is not running, the injector will start it automatically.", ImGui::GetStyleColorVec4(ImGuiCol_Text), "CSGO");
             float last_left_y = ImGui::GetCursorPosY();
             ImGui::SetNextItemWidth(ImGui::GetContentRegionAvailWidth());
-            static const char* modes_str[] = { "NezuLoader", "Standard", "Manual map", "NezuVac" };
+            static const char* modes_str[] = { "NezuLoader", "Standard", "Manual map", "NezuVac", "CS:GO" };
             if (ImGui::Combo("##injmde", (int*)&settings.injectionMode, modes_str, IM_ARRAYSIZE(modes_str)) && settings.injectionMode == InjectionMode::NezuVacOnly) {
                 settings.VacBypass = true;
             }
             float last_left_h = ImGui::GetCurrentWindow()->DC.LastItemRect.GetHeight();
             ImGui::NextColumn();
-            const bool dll_selected = !settings.dll.empty() && settings.injectionMode != InjectionMode::NezuVacOnly;
-            const bool can_select = settings.injectionMode != InjectionMode::NezuVacOnly;
+            const bool dll_selected = !settings.dll.empty() && settings.injectionMode != InjectionMode::NezuVacOnly && settings.injectionMode != InjectionMode::CSGOOnly;
+            const bool can_select = settings.injectionMode != InjectionMode::NezuVacOnly && settings.injectionMode != InjectionMode::CSGOOnly;
             if (ImGui::ButtonEx("Select DLL", ImVec2(dll_selected ? -button_h : -1, last_left_h), can_select ? ImGuiButtonFlags_None : ImGuiButtonFlags_Disabled))
                 settings.dll = U::DllFilePicker(hwnd);
             if (!can_select && ImGui::IsItemHovered()) {
@@ -660,7 +661,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 ImGui::SetWindowFontScale(normal_scale);
             }
             ImGui::SetCursorPosY(last_left_y);
-            bool can_inject = settings.injectionMode == InjectionMode::NezuLoader || settings.injectionMode == InjectionMode::NezuVacOnly || settings.dll.size() > 0;
+            bool can_inject = settings.injectionMode == InjectionMode::NezuLoader || settings.injectionMode == InjectionMode::NezuVacOnly || settings.injectionMode == InjectionMode::CSGOOnly || settings.dll.size() > 0;
             if (ImGui::ButtonEx("Load", ImVec2(-1, last_left_h), can_inject ? ImGuiButtonFlags_None : ImGuiButtonFlags_Disabled)) {
                 L::Clear();
                 if (settings.UseCustomCredentials && (!status.SteamActive || settings.RestartSteam)) {

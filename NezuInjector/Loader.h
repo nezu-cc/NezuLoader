@@ -7,6 +7,7 @@ enum class InjectionMode {
     Dll,
     DllManual,
     NezuVacOnly,
+    CSGOOnly
 };
 
 typedef struct t_NezuInjectorSettings {

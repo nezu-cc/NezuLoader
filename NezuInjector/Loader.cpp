@@ -335,6 +335,10 @@ DWORD WINAPI LoaderThread(LPVOID lpThreadParameter) {
 
 	L::Info("Found CS:GO as pid: %d", csgo_pid);
 
+	if (settings->injectionMode == InjectionMode::CSGOOnly) {
+		return TRUE;
+	}
+
 	HANDLE hCsProc = OpenProcess(PROCESS_ALL_ACCESS, FALSE, csgo_pid);
 	if (!hCsProc) {
 		L::Error("Failed to open CS:GO process (OpenProcess) 0x%X", GetLastError());
