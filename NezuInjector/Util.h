@@ -18,7 +18,7 @@ namespace U {
 	std::string DllFilePicker(HWND owner);
 	std::string DirectoryPicker(HWND owner);
 	BOOL Set_DontCallForThreads(HANDLE hProc, const WCHAR* cMod, bool set);
-	BOOL FindRemoteDll(HANDLE hProc, LPCTSTR name, HMODULE* address);
+	BOOL FindRemoteDll(HANDLE hProc, LPCTSTR name, HMODULE* address, BOOL fast = FALSE);
 	DWORD GetExportFuncRVA(const PBYTE pAssembly, LPCSTR lpProcName);
 	BOOL GetServiceBinaryPath(LPCTSTR cName, LPTSTR cBinPath, DWORD buffSize);
 	BOOL SetDebugPrivilege(BOOL enable);

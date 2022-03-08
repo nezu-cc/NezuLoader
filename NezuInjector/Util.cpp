@@ -124,12 +124,15 @@ BOOL U::Set_DontCallForThreads(HANDLE hProc, const WCHAR* cMod, bool set) {
 /// <param name="hProc">handle to the target process</param>
 /// <param name="name">name of the module</param>
 /// <param name="address">address if the module if found (may be NULL)</param>
+/// <param name="fast">don't retry after fail</param>
 /// <returns>TRUE if no error occurred(address will be set to NULL if module not found) and FALSE on failure</returns>
-BOOL U::FindRemoteDll(HANDLE hProc, LPCTSTR name, HMODULE* address) {
+BOOL U::FindRemoteDll(HANDLE hProc, LPCTSTR name, HMODULE* address, BOOL fast) {
 
     DWORD cbNeeded = 0;
     DWORD tries = 0;
     while (!EnumProcessModules(hProc, NULL, 0, &cbNeeded)) {
+        if (fast)
+            return FALSE;
         Sleep(100);//problem reading memory, just wait. The process is propably not initalised yet
         tries++;
         if (tries == 50) {//5 seconds

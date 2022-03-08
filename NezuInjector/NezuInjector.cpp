@@ -468,7 +468,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             }
             if (status.NezuVacStatusAddress == NULL && status.SteamHandle != NULL) {
                 HMODULE hNezuVac = NULL;
-                if (U::FindRemoteDll(status.SteamHandle, _T("NezuVac.dll"), &hNezuVac)) {
+                if (U::FindRemoteDll(status.SteamHandle, _T("NezuVac.dll"), &hNezuVac, TRUE)) {
                     if (hNezuVac) {
                         status.NezuVacStatusAddress = NezuVac::FindStatusSection(status.SteamHandle, hNezuVac);
                         if (status.NezuVacStatusAddress == NULL)
