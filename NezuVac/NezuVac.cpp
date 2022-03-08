@@ -4,7 +4,6 @@
 
 //#define DEBUG_CONSOLE
 
-
 NezuVac::f_loading oHooked_loading = NULL;
 NezuVac::f_calling oHooked_calling = NULL;
 
@@ -126,17 +125,17 @@ bool __stdcall NezuVac::Hooked_loading(vac_buffer* h_mod, char injection_flags) 
 
 }
 
-int __fastcall NezuVac::Hooked_calling(void* ecx, void* edx, DWORD crc_hash, char injection_mode, int unused_maybe, int runfunc_param1,
-	int runfunc_param2, int runfunc_param3, int* runfunc_param4, int* region_or_size_check_maybe, int* module_status) {
+int __fastcall NezuVac::Hooked_calling(void* ecx, void* edx, DWORD crc_hash, char injection_mode, int unused1, int id,
+	int param1, int unused2, int param2, int param3, int* param4, int* size_check) {
 
-	oHooked_calling(ecx, edx, crc_hash, injection_mode, unused_maybe, runfunc_param1, runfunc_param2, runfunc_param3, runfunc_param4, region_or_size_check_maybe, module_status);
+	int status = oHooked_calling(ecx, edx, crc_hash, injection_mode, unused1, id, param1, unused2, param2, param3, param4, size_check);
 
-	if (*module_status != VAC_SUCCESS && *module_status != VAC_OTHER_SUCCESS) {
-		*module_status = VAC_SUCCESS;
+	if (status != VAC_SUCCESS && status != VAC_OTHER_SUCCESS) {
+		status = VAC_SUCCESS;
 		//printf("[nezu] patched return from uid {0x%.8X}.\n", crc_hash);
 	}
 
-	return 1;
+	return status;
 
 }
 
