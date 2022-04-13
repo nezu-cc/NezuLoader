@@ -25,6 +25,7 @@ namespace I {
 	IMaterialSystem* MaterialSystem;
 	ICVar* CVar;
 	CGlobalVarsBase* Globals;
+	CGameRulesProxy** GameRulesProxy;
 
 	void CaptureInterfaces() {
 
@@ -40,6 +41,7 @@ namespace I {
 		I::InputSystem = (IInputSystem*)CaptureInterface("inputsystem.dll", "InputSystemVersion001");
 		I::CVar = (ICVar*)CaptureInterface("vstdlib.dll", "VEngineCvar007");
 		I::Globals = **(CGlobalVarsBase***)((FindPattern("client.dll", "A1 ? ? ? ? 5E 8B 40 10") + 1));
+		I::GameRulesProxy = *(CGameRulesProxy***)(FindPattern("client.dll", "A1 ? ? ? ? 85 C0 0F 84 ? ? ? ? 80 B8 ? ? ? ? ? 74 7A") + 1);
 
 		//steam
 		HSteamUser hSteamUser = ((HSteamUser(__cdecl*)(void))GetProcAddress(GetModuleHandleA("steam_api.dll"), "SteamAPI_GetHSteamUser"))();

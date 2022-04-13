@@ -13,25 +13,46 @@ void __fastcall H::Hooked_FrameStageNotify(void* thisPtr, void* edx, ClientFrame
 	if (curStage == FRAME_RENDER_START) {
 
 		H::Hook_NET_SendLong(Cfg::c.misc.crasher);
-		if (Cfg::c.misc.crasher_auto && G::crashPrimed) {
-			bool has_bot = false;
-			for (int i = 0; i < I::Engine->GetMaxClients(); i++) {
-				player_info_t info;
-				if (!I::Engine->GetPlayerInfo(i, &info) || info.ishltv)
-					continue;
-				if (info.fakeplayer) {
-					has_bot = true;
-					break;
+
+		static auto game_type = I::CVar->FindVar("game_type");
+
+		int g_type = game_type->GetInt();
+
+		if (g_type == 6) {
+			if (Cfg::c.misc.crasher_auto && *I::GameRulesProxy && G::LocalPlayer) {
+				int stage = (*I::GameRulesProxy)->spawnStage();
+				bool on_ground = (G::LocalPlayer->flags() & FL_ONGROUND) != 0;
+				static bool last_on_ground = 0;
+				if ((*I::GameRulesProxy)->SurvivalStartTime() > 0 && stage == 6 && !last_on_ground && on_ground) { //final
+					Cfg::c.misc.crasher = true;
+					G::crasherStartTime = I::Globals->realtime;
 				}
-			}
-			if (!has_bot) {
-				G::crashPrimed = false;
-				Cfg::c.misc.crasher = true;
-				G::crasherStartTime = I::Globals->realtime;
+				last_on_ground = on_ground;
 			}
 		}
-		else
-			G::crashPrimed = false;
+		else {
+			if (Cfg::c.misc.crasher_auto && G::crashPrimed) {
+				bool has_bot = false;
+				for (int i = 0; i < I::Engine->GetMaxClients(); i++) {
+					player_info_t info;
+					if (!I::Engine->GetPlayerInfo(i, &info) || info.ishltv)
+						continue;
+					if (info.fakeplayer) {
+						has_bot = true;
+						break;
+					}
+				}
+				if (!has_bot) {
+					G::crashPrimed = false;
+					Cfg::c.misc.crasher = true;
+					G::crasherStartTime = I::Globals->realtime;
+				}
+			}
+			else
+				G::crashPrimed = false;
+		}
+
+
 		if (I::Engine->IsInGame()) {
 			if (Cfg::c.misc.crasher && I::Globals->realtime - G::crasherStartTime > Cfg::c.misc.crasher_max_time)
 				Cfg::c.misc.crasher = false;

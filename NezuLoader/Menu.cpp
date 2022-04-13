@@ -749,7 +749,16 @@ void Menu::DrawToolsTab(IDirect3DDevice9* pDevice) {
                 if (G::debug) {
                     static float w_heigth = 0;
                     ImGui::BeginChildWithTitle("Debug", ImVec2(avail_w, w_heigth)); {
+                        ImGui::Text("last packet delta = %.2f", I::Globals->curtime - I::Engine->GetLastTimeStamp());
                         ImGui::Text("G::crashPrimed = %s", G::crashPrimed ? "true" : "false");
+                        if (*I::GameRulesProxy) {
+                            auto proxy = *I::GameRulesProxy;
+                            ImGui::Text("GameRulesProxy::SurvivalStartTime = %f", proxy->SurvivalStartTime());
+                            ImGui::Text("GameRulesProxy::spawnStage = %d", proxy->spawnStage());
+                        }
+
+                        static auto game_type = I::CVar->FindVar("game_type");
+                        ImGui::Text("game_type = %d", game_type->GetInt());
 
                         static std::string js_textbox = "";
                         ImGui::Text("Execute javascript");

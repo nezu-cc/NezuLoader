@@ -44,6 +44,7 @@
 #include <iomanip>
 #include <stack>
 #include <algorithm>
+#include <sstream>
 
 #pragma warning( push )
 #pragma warning( disable : 6387 6451 6387 6011 28182 6255 26495 6031 26812 6031 26551 )

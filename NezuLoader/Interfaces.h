@@ -24,4 +24,5 @@ namespace I {
 	extern IMaterialSystem* MaterialSystem;
 	extern ICVar* CVar;
 	extern CGlobalVarsBase* Globals;
+	extern CGameRulesProxy** GameRulesProxy;
 }
