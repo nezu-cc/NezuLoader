@@ -47,7 +47,7 @@ namespace M {
 		KeyValues_ReadString = (void*)FindPattern("client.dll", "55 8B EC 83 E4 C0 81 EC ? ? ? ? 53 8B 5D 08");
 		UiComponent_PartyList = *(CUiComponent_PartyList***)(FindPattern("client.dll", "EB 35 8D 04 92") + 0x2 + 0x35 + 0x1);// (jmp opcode + operand) + jump distance + mov opcode
 		UiComponent_PartyBrowser = *(CUiComponent_PartyBrowser***)(FindPattern("client.dll", "83 E4 F8 8B 0D ? ? ? ? 85 C9") + 5);
-		UiComponent_PartyBrowser_HasBeenInvited = (void*)relativeToAbsolute(FindPattern("client.dll", "E8 ? ? ? ? 85 C0 74 37 85 F6") + 1);
+		UiComponent_PartyBrowser_HasBeenInvited = (void*)relativeToAbsolute(FindPattern("client.dll", "50 E8 ? ? ? ? 85 C0 74 37") + 2);
 		JoinLobby = (f_JoinLobby)FindPattern("client.dll", "55 8B EC 83 E4 F8 8B 0D ? ? ? ? 85 C9");
 		JoinLobbyId = (uint64_t*)*(DWORD*)(FindPattern("client.dll", "A1 ? ? ? ? 0B 05 ? ? ? ? 74 13") + 1);
 		StopMatchmakingFunc = (void*)FindPattern("client.dll", "8B 41 08 83 C1 08 68");
