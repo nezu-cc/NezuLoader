@@ -39,7 +39,7 @@ namespace M {
 		d3d9Device = **(IDirect3DDevice9***)(FindPattern("shaderapidx9.dll", "A1 ? ? ? ? 50 8B 08 FF 51 0C") + 1);
 		CreateSession = (f_CreateSession)relativeToAbsolute(FindPattern("client.dll", "E8 ? ? ? ? 83 EC 14 E8") + 1);
 		CreateSessionUI = (f_CreateSessionUI)relativeToAbsolute(FindPattern("client.dll", "E8 ? ? ? ? 8B 50 08") + 1);
-		InitKeyValues = (f_InitKeyValues)relativeToAbsolute(FindPattern("client.dll", "E8 ? ? ? ? 5F 89 06") + 1);
+		InitKeyValues = (f_InitKeyValues)FindPattern("client.dll", "55 8B EC 51 33 C0 C7 45");
 		//HasPrimeFunc = (void*)relativeToAbsolute(FindPattern("client.dll", "E8 ? ? ? ? 88 44 24 13 84 C0") + 1);
 		ChangeGameUIStateFunc = (void*)relativeToAbsolute(FindPattern("client.dll", "E8 ? ? ? ? F3 0F 10 4D ? C6 86") + 1);
 		demoFileEndReached = (void*)FindPattern("client.dll", "8B C8 85 C9 74 1F 80 79 10");
