@@ -2,7 +2,6 @@ name: MSBuild
 
 on:
   push:
-    branches: [ "master" ]
 
 env:
   SOLUTION_FILE_PATH: NezuLoader.sln
